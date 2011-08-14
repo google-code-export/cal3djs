@@ -1,0 +1,1 @@
+Copyright 2000, Douglas W. Walsh.  May be distributed under the terms of the GNU FDL (http://www.gnu.org/copyleft/fdl.html)
