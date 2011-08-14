@@ -20,9 +20,9 @@ var Cal3D = Cal3D || {};
 
 
 /**
-	@namespace CalFileConstants
+	@namespace CalLibraryConstants
 */
-Cal3D.CalFileConstants = {
+Cal3D.CalLibraryConstants = {
 	// binary file magic cookies
 	SKELETON_FILE_MAGIC:		'CSF', 
 	ANIMATION_FILE_MAGIC:		'CAF', 
@@ -257,7 +257,7 @@ Cal3D.CalLoader.loadModelFromConfigFile = function(url, callback) {
 */
 Cal3D.CalLoader.loadCoreAnimationFromFile = function(url, skel, callback) {
 	if( url.length >= 3 && 
-		url.substring(url.length - 3, url.length).toUpperCase() == Cal3D.CalFileConstants.ANIMATION_XMLFILE_MAGIC ) {
+		url.substring(url.length - 3, url.length).toUpperCase() == Cal3D.CalLibraryConstants.ANIMATION_XMLFILE_MAGIC ) {
 		Cal3D.CalLoader.loadXmlCoreAnimation(url, skel, callback);
 		return;
 	}
@@ -307,7 +307,7 @@ Cal3D.CalLoader.loadCoreAnimationFromFile = function(url, skel, callback) {
 */
 Cal3D.CalLoader.loadCoreAnimationFromData = function(data, skel) {
 	// check if this is a valid animation file
-	if(data.substring(0, 3) != Cal3D.CalFileConstants.ANIMATION_FILE_MAGIC) {
+	if(data.substring(0, 3) != Cal3D.CalLibraryConstants.ANIMATION_FILE_MAGIC) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INVALID_FILE_FORMAT, 'loader.js');
 		return null;
 	}
@@ -316,8 +316,8 @@ Cal3D.CalLoader.loadCoreAnimationFromData = function(data, skel) {
 	
 	// check if the version is compatible with the library
 	var version = datasource.readInteger();
-	if( isNaN(version) || version < Cal3D.CalFileConstants.EARLIEST_COMPATIBLE_FILE_VERSION || 
-		version > Cal3D.CalFileConstants.CURRENT_FILE_VERSION ) {
+	if( isNaN(version) || version < Cal3D.CalLibraryConstants.EARLIEST_COMPATIBLE_FILE_VERSION || 
+		version > Cal3D.CalLibraryConstants.CURRENT_FILE_VERSION ) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INVALID_FILE_FORMAT, 'loader.js');
 		return null;
 	}
@@ -371,7 +371,7 @@ Cal3D.CalLoader.loadCoreAnimationFromData = function(data, skel) {
 */
 Cal3D.CalLoader.loadCoreMaterialFromFile = function(url, callback) {
 	if( url.length >= 3 && 
-		url.substring(url.length - 3, url.length).toUpperCase() == Cal3D.CalFileConstants.MATERIAL_XMLFILE_MAGIC ) {
+		url.substring(url.length - 3, url.length).toUpperCase() == Cal3D.CalLibraryConstants.MATERIAL_XMLFILE_MAGIC ) {
 		Cal3D.CalLoader.loadXmlCoreMaterial(url, callback);
 		return;
 	}
@@ -420,7 +420,7 @@ Cal3D.CalLoader.loadCoreMaterialFromFile = function(url, callback) {
 */
 Cal3D.CalLoader.loadCoreMaterialFromData = function(data) {
 	// check if this is a valid material file
-	if(data.substring(0, 3) != Cal3D.CalFileConstants.MATERIAL_FILE_MAGIC) {
+	if(data.substring(0, 3) != Cal3D.CalLibraryConstants.MATERIAL_FILE_MAGIC) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INVALID_FILE_FORMAT, 'loader.js');
 		return null
 	}
@@ -429,8 +429,8 @@ Cal3D.CalLoader.loadCoreMaterialFromData = function(data) {
 
 	// check if the version is compatible with the library
 	var version = datasource.readInteger();
-	if( isNaN(version) || version < Cal3D.CalFileConstants.EARLIEST_COMPATIBLE_FILE_VERSION || 
-		version > Cal3D.CalFileConstants.CURRENT_FILE_VERSION ) {
+	if( isNaN(version) || version < Cal3D.CalLibraryConstants.EARLIEST_COMPATIBLE_FILE_VERSION || 
+		version > Cal3D.CalLibraryConstants.CURRENT_FILE_VERSION ) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INCOMPATIBLE_FILE_VERSION, 'loader.js');
 		return null;
 	}
@@ -522,7 +522,7 @@ Cal3D.CalLoader.loadCoreMaterialFromData = function(data) {
 */
 Cal3D.CalLoader.loadCoreMeshFromFile = function(url, callback) {
 	if( url.length >= 3 && 
-		url.substring(url.length - 3, url.length).toUpperCase() == Cal3D.CalFileConstants.MESH_XMLFILE_MAGIC ) {
+		url.substring(url.length - 3, url.length).toUpperCase() == Cal3D.CalLibraryConstants.MESH_XMLFILE_MAGIC ) {
 		Cal3D.CalLoader.loadXmlCoreMesh(url, callback);
 		return;
 	}
@@ -571,7 +571,7 @@ Cal3D.CalLoader.loadCoreMeshFromFile = function(url, callback) {
 */
 Cal3D.CalLoader.loadCoreMeshFromData = function(data) {
 	// check if this is a valid mesh file
-	if(data.substring(0, 3) != Cal3D.CalFileConstants.MESH_FILE_MAGIC) {
+	if(data.substring(0, 3) != Cal3D.CalLibraryConstants.MESH_FILE_MAGIC) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INVALID_FILE_FORMAT, 'loader.js');
 		return null
 	}
@@ -580,8 +580,8 @@ Cal3D.CalLoader.loadCoreMeshFromData = function(data) {
 
 	// check if the version is compatible with the library
 	var version = datasource.readInteger();
-	if( isNaN(version) || version < Cal3D.CalFileConstants.EARLIEST_COMPATIBLE_FILE_VERSION || 
-		version > Cal3D.CalFileConstants.CURRENT_FILE_VERSION ) {
+	if( isNaN(version) || version < Cal3D.CalLibraryConstants.EARLIEST_COMPATIBLE_FILE_VERSION || 
+		version > Cal3D.CalLibraryConstants.CURRENT_FILE_VERSION ) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INCOMPATIBLE_FILE_VERSION, 'loader.js');
 		return null;
 	}
@@ -618,7 +618,7 @@ Cal3D.CalLoader.loadCoreMeshFromData = function(data) {
 */
 Cal3D.CalLoader.loadCoreSkeletonFromFile = function(url, callback) {
 	if( url.length >= 3 && 
-		url.substring(url.length - 3, url.length).toUpperCase() == Cal3D.CalFileConstants.SKELETON_XMLFILE_MAGIC ) {
+		url.substring(url.length - 3, url.length).toUpperCase() == Cal3D.CalLibraryConstants.SKELETON_XMLFILE_MAGIC ) {
 		Cal3D.CalLoader.loadXmlCoreSkeleton(url, callback);
 		return;
 	}
@@ -666,7 +666,7 @@ Cal3D.CalLoader.loadCoreSkeletonFromFile = function(url, callback) {
 */
 Cal3D.CalLoader.loadCoreSkeletonFromData = function(data) {
 	// check if this is a valid skeleton file
-	if(data.substring(0, 3) != Cal3D.CalFileConstants.SKELETON_FILE_MAGIC) {
+	if(data.substring(0, 3) != Cal3D.CalLibraryConstants.SKELETON_FILE_MAGIC) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INVALID_FILE_FORMAT, 'loader.js');
 		return null
 	}
@@ -675,8 +675,8 @@ Cal3D.CalLoader.loadCoreSkeletonFromData = function(data) {
 
 	// check if the version is compatible with the library
 	var version = datasource.readInteger();
-	if( isNaN(version) || version < Cal3D.CalFileConstants.EARLIEST_COMPATIBLE_FILE_VERSION || 
-		version > Cal3D.CalFileConstants.CURRENT_FILE_VERSION ) {
+	if( isNaN(version) || version < Cal3D.CalLibraryConstants.EARLIEST_COMPATIBLE_FILE_VERSION || 
+		version > Cal3D.CalLibraryConstants.CURRENT_FILE_VERSION ) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INCOMPATIBLE_FILE_VERSION, 'loader.js');
 		return null;
 	}
@@ -1382,13 +1382,13 @@ Cal3D.CalLoader.parseXmlCoreAnimation = function(xmldoc, skel) {
 	}
 
 	if( animationElem.hasAttribute('MAGIC') && 
-		animationElem.getAttribute('MAGIC') != Cal3D.CalFileConstants.ANIMATION_XMLFILE_MAGIC ) {
+		animationElem.getAttribute('MAGIC') != Cal3D.CalLibraryConstants.ANIMATION_XMLFILE_MAGIC ) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INVALID_FILE_FORMAT, 'loader.js');
 		return null;
 	}
 
 	if( animationElem.hasAttribute('VERSION') && 
-		parseInt(animationElem.getAttribute('VERSION') < Cal3D.CalFileConstants.EARLIEST_COMPATIBLE_FILE_VERSION)) {
+		parseInt(animationElem.getAttribute('VERSION') < Cal3D.CalLibraryConstants.EARLIEST_COMPATIBLE_FILE_VERSION)) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INCOMPATIBLE_FILE_VERSION, 'loader.js');
 		return null;
 	}
@@ -1542,13 +1542,13 @@ Cal3D.CalLoader.parseXmlCoreSkeleton = function(xmldoc) {
 	}
 
 	if( skeletonElem.hasAttribute('MAGIC') && 
-		skeletonElem.getAttribute('MAGIC') != Cal3D.CalFileConstants.SKELETON_XMLFILE_MAGIC ) {
+		skeletonElem.getAttribute('MAGIC') != Cal3D.CalLibraryConstants.SKELETON_XMLFILE_MAGIC ) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INVALID_FILE_FORMAT, 'loader.js');
 		return null;
 	}
 
 	if( skeletonElem.hasAttribute('VERSION') && 
-		parseInt(skeletonElem.getAttribute('VERSION')) < Cal3D.CalFileConstants.EARLIEST_COMPATIBLE_FILE_VERSION ) {
+		parseInt(skeletonElem.getAttribute('VERSION')) < Cal3D.CalLibraryConstants.EARLIEST_COMPATIBLE_FILE_VERSION ) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INCOMPATIBLE_FILE_VERSION, 'loader.js');
 		return null;
 	}
@@ -1721,13 +1721,13 @@ Cal3D.CalLoader.parseXmlCoreMesh = function(xmldoc) {
 	}
 
 	if( meshElem.hasAttribute('MAGIC') && 
-		meshElem.getAttribute('MAGIC') != Cal3D.CalFileConstants.MESH_XMLFILE_MAGIC ) {
+		meshElem.getAttribute('MAGIC') != Cal3D.CalLibraryConstants.MESH_XMLFILE_MAGIC ) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INVALID_FILE_FORMAT, 'loader.js');
 		return null;
 	}
 
 	if( meshElem.hasAttribute('VERSION') && 
-		parseInt(meshElem.getAttribute('VERSION')) < Cal3D.CalFileConstants.EARLIEST_COMPATIBLE_FILE_VERSION ) {
+		parseInt(meshElem.getAttribute('VERSION')) < Cal3D.CalLibraryConstants.EARLIEST_COMPATIBLE_FILE_VERSION ) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INCOMPATIBLE_FILE_VERSION, 'loader.js');
 		return null;
 	}
@@ -2006,13 +2006,13 @@ Cal3D.CalLoader.parseXmlCoreMaterial = function(xmldoc) {
 	}
 
 	if( materialElem.hasAttribute('MAGIC') && 
-		materialElem.getAttribute('MAGIC') != Cal3D.CalFileConstants.MATERIAL_XMLFILE_MAGIC ) {
+		materialElem.getAttribute('MAGIC') != Cal3D.CalLibraryConstants.MATERIAL_XMLFILE_MAGIC ) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INVALID_FILE_FORMAT, 'loader.js');
 		return null;
 	}
 
 	if( materialElem.hasAttribute('VERSION') &&
-		parseInt(materialElem.getAttribute('VERSION')) < Cal3D.CalFileConstants.EARLIEST_COMPATIBLE_FILE_VERSION ) {
+		parseInt(materialElem.getAttribute('VERSION')) < Cal3D.CalLibraryConstants.EARLIEST_COMPATIBLE_FILE_VERSION ) {
 		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INCOMPATIBLE_FILE_VERSION, 'loader.js');
 		return null;
 	}
