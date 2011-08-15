@@ -24,11 +24,13 @@ http://cal3djs.googlecode.com/svn/wiki/architecture_guide_classes_2.gif
 == Instance Classes ==
 
 Each set of Instance Classes contains the specific data for one instance of a model type. This data can be divided into 3 parts: 
+
  # The current state of the skeleton, see Skeletons and Bones for details.
  # The active set of animations, see Animations, Tracks and Keyframes for details. 
  # The attached body parts, see Meshes and Submeshes for details. 
 
 There are 4 helper classes that simplify the model handling: 
+
  # The motion control, see The 'Mixer' for details. 
  # The skinning stage (Physique). 
  # The (experimental) cloth animation layer (Spring-System). 
@@ -41,6 +43,7 @@ http://cal3djs.googlecode.com/svn/wiki/architecture_guide_classes_3.gif
 == Animation Pipeline ==
 
 The process of calculating the final model from the core data and the current instance state must be seen as one single pipeline: 
+
  # The combination of all the active animations in the "Mixer" to get a current skeleton pose.
  # The combination of all the active morph targets in the "Morpher" to get a current mesh. 
  # The deformation of the current mesh based on the current skeleton pose in the "Physique". 
@@ -80,6 +83,7 @@ All the above data can be shared between different model instances and is theref
 = The Mixer =
 
 The Cal3D library provides a powerful and flexible, yet easy-to-use animation control system through the so called 'Mixer'. This helper class handles the following things for a model instance: 
+
  # The addition and removal of animations to the active animation set. 
  # The update of the active animation states including fade in and out. 
  # The weighted blending and prioritized overlay of the active animations according to their type. 
