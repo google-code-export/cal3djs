@@ -79,7 +79,7 @@ Say we have a walking, human-like model waving with his right hand. There are 2 
 
 The actual transformation data for a bone is stored in several core keyframes that are contained in the corresponding track. Each keyframe holds a relative rotation and a relative translation to the parent bone for a specified point of time. These values are interpolated between two following keyframes by the Cal3DJS library to achieve a smooth motion. 
 
-All the above data can be shared between different model instances and is therefore completely stored in the Core Classes. The active set of animations and their blending state is what makes the difference here, so these values are defined in each model instance separately. 
+All the above data can be shared between different model instances and is therefore completely stored in the [Architecture#Core_Classes Core Classes]. The active set of animations and their blending state is what makes the difference here, so these values are defined in each model instance separately. 
 
 = Mixer =
 
