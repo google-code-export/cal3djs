@@ -60,3 +60,31 @@ Vectors and quaternions are essential elements in the internal calculations of t
 The Cal3D library is designed as a skeletal-based animation system. This means that all the mesh vertices of the animated model are attached to one or more bones of an underlying skeleton structure. This makes it very easy to animate the whole model, you only need to adjust the skeleton pose and the model meshes are automatically deformed. This method of attaching meshes to a bone hierarchy is known as 'skinning'. 
 
 *Figure 3-1. Core Classes*
+
+http://cal3djs.googlecode.com/svn/wiki/architecture_guide_phases.gif
+
+A bone is defined as a relative transformation to the parent bone. This transformation is split into two separate parts: The relative translation stored in a vector, and the relative rotation stored in a quaternion. The absolute transformation of a bone is recursively calculated after each animation step.
+
+Following the concept of shared data, the core skeleton and its core bones contain data such as the initial skeleton pose, the bone names and the hierarchy itself. Whereas the skeleton and the bones of the model instances have only the current transformation and a link to the corresponding skeleton or bone stored.
+
+= Animations, Tracks and Keyframes =
+
+The Cal3D library stores every motion such as walking, jumping, waving etc. in a separate core animation inside the core model. These animations contain one core track for each bone that is affected by the specific motion. 
+
+Say we have a walking, human-like model waving with his right hand. There are 2 animations in this scenario, the one for walking and the other for waving. The walking animation does most likely contain a track for every bone there is to have a fully animated model. The waving animation will only be defined locally, so only tracks for the right hand, arm, shoulder and probably neck and head are stored within. This selective inclusion allows a powerful blending and overlay mechanism as we will see in The 'Mixer'.
+
+The actual transformation data for a bone is stored in several core keyframes that are contained in the corresponding track. Each keyframe holds a relative rotation and a relative translation to the parent bone for a specified point of time. These values are interpolated between two following keyframes by the Cal3D library to achieve a smooth motion. 
+
+All the above data can be shared between different model instances and is therefore completely stored in the Core Classes. The active set of animations and their blending state is what makes the difference here, so these values are defined in each model instance separately. 
+
+= The Mixer =
+
+The Cal3D library provides a powerful and flexible, yet easy-to-use animation control system through the so called 'Mixer'. This helper class handles the following things for a model instance: 
+ # The addition and removal of animations to the active animation set. 
+ # The update of the active animation states including fade in and out. 
+ # The weighted blending and prioritized overlay of the active animations according to their type. 
+ # The update of the current pose of the skeleton. 
+
+When triggering a new animation you can choose between different behaviors. Currently implemented are the cycle and the action types. Once started, a cycle animation will loop until you explicitly stop it. This is well-suited for motions such as walking or swimming. The action type is a one-time animation that is executed only once and is removed automatically from the active animation set thereafter. As you can imagine this is useful for motions such as fighting moves or emotes. There are plans to extend the number of animation types in future releases of the Cal3D library.
+
+Each active animation has a weight associated with it. This makes it possible to fine tune the amount of influence each animation has on the model. Furthermore each animation type has a different priority in the blending process. In the current version of the Cal3D library, the action type has a higher priority than the cycle one. This is necessary to make actions completely overlay the ongoing cycles.
