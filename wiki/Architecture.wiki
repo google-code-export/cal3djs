@@ -13,7 +13,7 @@ Say we have a little fantasy game with heroic warriors and deadly dragons. There
 As explained, each set of _*Core Classes*_ contains all the data for one model type. This data can be divided into 4 parts: 
 
  # The hierarchical structure, see [Architecture#Skeletons_and_Bones Skeletons and Bones] for details. 
- # The motion data, see [Architecture#Animations_Tracks_and_Keyframes Animations, Tracks and Keyframes] for details. 
+ # The motion data, see [Architecture#Animations,_Tracks_and_Keyframes Animations, Tracks and Keyframes] for details. 
  # The surface properties, see [Architecture#Materials Materials] for details. 
  # The body parts, see [Architecture#Meshes_and_Submeshes Meshes and Submeshes] for details.
 
