@@ -1,5 +1,5 @@
 #summary This document explains the architecture of the Cal3DJS library.
-#labels Phase-Design
+#labels Phase-Design,Featured
 
 = Overview =
 
