@@ -23,18 +23,18 @@ http://cal3djs.googlecode.com/svn/wiki/architecture_guide_classes_2.gif
 
 == Instance Classes ==
 
-Each set of Instance Classes contains the specific data for one instance of a model type. This data can be divided into 3 parts: 
+Each set of _*Instance Classes*_ contains the specific data for one instance of a model type. This data can be divided into 3 parts: 
 
- # The current state of the skeleton, see Skeletons and Bones for details.
- # The active set of animations, see Animations, Tracks and Keyframes for details. 
- # The attached body parts, see Meshes and Submeshes for details. 
+ # The current state of the skeleton, see [Architecture#Skeletons_and_Bones Skeletons and Bones] for details.
+ # The active set of animations, see [Architecture#Animations,_Tracks_and_Keyframes Animations, Tracks and Keyframes] for details. 
+ # The attached body parts, see [Architecture#Meshes_and_Submeshes Meshes and Submeshes] for details. 
 
 There are 4 helper classes that simplify the model handling: 
 
- # The motion control, see The 'Mixer' for details. 
+ # The motion control, see [Architecture#Mixer Mixer] for details. 
  # The skinning stage (Physique). 
  # The (experimental) cloth animation layer (Spring-System). 
- # The rendering interface, see The 'Renderer' for details. 
+ # The rendering interface, see [Architecture#Renderer Renderer] for details. 
 
 *Figure 1-2. Core Classes*
 
@@ -74,7 +74,7 @@ Following the concept of shared data, the core skeleton and its core bones conta
 
 The Cal3DJS library stores every motion such as walking, jumping, waving etc. in a separate core animation inside the core model. These animations contain one core track for each bone that is affected by the specific motion. 
 
-Say we have a walking, human-like model waving with his right hand. There are 2 animations in this scenario, the one for walking and the other for waving. The walking animation does most likely contain a track for every bone there is to have a fully animated model. The waving animation will only be defined locally, so only tracks for the right hand, arm, shoulder and probably neck and head are stored within. This selective inclusion allows a powerful blending and overlay mechanism as we will see in the Mixer.
+Say we have a walking, human-like model waving with his right hand. There are 2 animations in this scenario, the one for walking and the other for waving. The walking animation does most likely contain a track for every bone there is to have a fully animated model. The waving animation will only be defined locally, so only tracks for the right hand, arm, shoulder and probably neck and head are stored within. This selective inclusion allows a powerful blending and overlay mechanism as we will see in [Architecture#Mixer Mixer].
 
 The actual transformation data for a bone is stored in several core keyframes that are contained in the corresponding track. Each keyframe holds a relative rotation and a relative translation to the parent bone for a specified point of time. These values are interpolated between two following keyframes by the Cal3DJS library to achieve a smooth motion. 
 
@@ -101,7 +101,7 @@ In the Cal3DJS library, a core material is composed from the color components (a
 
 A simple mechanism for material handling is implemented, which provides an easy way to change materials and therefore the look of a model instance. For each core model there exists one or more material sets. Materials in the same set share a common look, as example 'skin', 'leather' or 'chain-mail'. Additionally there are one or more material threads in the core model. These material threads contain the same materials but grouped by a specific part of the model, as example 'left foot', 'torso' or 'helmet'. Together they build a material grid that defines a material for each material set/thread pair. 
 
-As described in Meshes and Submeshes, every part of the core model (every submesh to be more exact) has a material thread assigned. You can now very easily change the look of a model instance, by simply select a new current material set for its parts. The Cal3DJS library is now able to look up the material in the material grid with the given new material set and the material thread stored in the core model parts. 
+As described in [Architecture#Meshes_and_Submeshes Meshes and Submeshes], every part of the core model (every submesh to be more exact) has a material thread assigned. You can now very easily change the look of a model instance, by simply select a new current material set for its parts. The Cal3DJS library is now able to look up the material in the material grid with the given new material set and the material thread stored in the core model parts. 
 
 = Meshes and Submeshes =
 
