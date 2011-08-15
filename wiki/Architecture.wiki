@@ -20,3 +20,33 @@ As explained, each set of _*Core Classes*_ contains all the data for one model t
 *Figure 1. Core Classes*
 
 http://cal3djs.googlecode.com/svn/wiki/architecture_guide_classes_2.gif
+
+== Instance Classes ==
+
+Each set of Instance Classes contains the specific data for one instance of a model type. This data can be divided into 3 parts: 
+ # The current state of the skeleton, see Skeletons and Bones for details.
+ # The active set of animations, see Animations, Tracks and Keyframes for details. 
+ # The attached body parts, see Meshes and Submeshes for details. 
+
+There are 4 helper classes that simplify the model handling: 
+ # The motion control, see The 'Mixer' for details. 
+ # The skinning stage (Physique). 
+ # The (experimental) cloth animation layer (Spring-System). 
+ # The rendering interface, see The 'Renderer' for details. 
+
+*Figure 2. Core Classes*
+
+http://cal3djs.googlecode.com/svn/wiki/architecture_guide_classes_3.gif
+
+== Animation Pipeline ==
+
+The process of calculating the final model from the core data and the current instance state must be seen as one single pipeline: 
+ # The combination of all the active animations in the "Mixer" to get a current skeleton pose.
+ # The combination of all the active morph targets in the "Morpher" to get a current mesh. 
+ # The deformation of the current mesh based on the current skeleton pose in the "Physique". 
+ # The simulation of the cloth parts of the model in the "Spring-System". 
+ # The querying of the final data from the "Renderer". 
+
+*Figure 2. Core Classes*
+
+http://cal3djs.googlecode.com/svn/wiki/architecture_guide_pipeline.gif
