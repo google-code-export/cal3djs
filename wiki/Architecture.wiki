@@ -7,9 +7,12 @@ The basic concept in the Cal3D library is to separate data that can be shared be
 The Cal3D library has a set of _*Core Classes*_ that represents one type of model and that stores all the shared data. Each set of _*Instance Classes*_ is constructed from the Core Classes and represents one specific instance of the model type
 
 Say we have a little fantasy game with heroic warriors and deadly dragons. There will be 2 different core models, namely the one for the warriors and the other for the dragons. The core model of the warriors contains all the animations, materials and meshes of all possible warrior instances. The same holds for the dragon core model. Now, every time a warrior or dragon is born, a new model instance will be created based on its core model. The individual appearance is done by selecting specific meshes and materials from the core model. This allows us to have epic battles with numerous different warriors and dragons, even so we store most of the data only once.
-= Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== Core Classes ==
+
+As explained, each set of _*Core Classes*_ contains all the data for one model type. This data can be divided into 4 parts: 
+
+ # 1. The hierarchical structure, see Skeletons and Bones for details. 
+ # 2. The motion data, see Animations, Tracks and Keyframes for details. 
+ # 3. The surface properties, see Materials for details. 
+ # 4. The body parts, see Meshes and Submeshes for details.
