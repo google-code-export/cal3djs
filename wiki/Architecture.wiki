@@ -3,7 +3,7 @@
 = Overview =
 
 The basic concept in the Cal3D library is to separate data that can be shared between several objects from data that is tied to one specific object instance. In the realm of skeletal character animation there is quite a lot of shared data: Take the animations and the meshes as examples.<br><br>
-The Cal3D library has a set of _Core Classes_ that represents one type of model and that stores all the shared data. Each set of Instance Classes is constructed from the Core Classes and represents one specific instance of the model type.<br><br>
+The Cal3D library has a set of _*Core Classes*_ that represents one type of model and that stores all the shared data. Each set of Instance Classes is constructed from the Core Classes and represents one specific instance of the model type.<br><br>
 
 = Details =
 
