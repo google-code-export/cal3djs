@@ -18,3 +18,4 @@ As explained, each set of _*Core Classes*_ contains all the data for one model t
  # The body parts, see Meshes and Submeshes for details.
 
 *Figure 1. Core Classes*
+http://cal3djs.googlecode.com/svn/wiki/architecture_guide_classes_2.gif
