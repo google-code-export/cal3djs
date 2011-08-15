@@ -17,7 +17,7 @@ As explained, each set of _*Core Classes*_ contains all the data for one model t
  # The surface properties, see Materials for details. 
  # The body parts, see Meshes and Submeshes for details.
 
-*Figure 1. Core Classes*
+*Figure 1-1. Core Classes*
 
 http://cal3djs.googlecode.com/svn/wiki/architecture_guide_classes_2.gif
 
@@ -34,7 +34,7 @@ There are 4 helper classes that simplify the model handling:
  # The (experimental) cloth animation layer (Spring-System). 
  # The rendering interface, see The 'Renderer' for details. 
 
-*Figure 2. Core Classes*
+*Figure 1-2. Core Classes*
 
 http://cal3djs.googlecode.com/svn/wiki/architecture_guide_classes_3.gif
 
@@ -47,6 +47,16 @@ The process of calculating the final model from the core data and the current in
  # The simulation of the cloth parts of the model in the "Spring-System". 
  # The querying of the final data from the "Renderer". 
 
-*Figure 2. Core Classes*
+*Figure 1-3. Core Classes*
 
 http://cal3djs.googlecode.com/svn/wiki/architecture_guide_pipeline.gif
+
+= Vectors and Quaternions =
+
+Vectors and quaternions are essential elements in the internal calculations of the Cal3D library. The translation of bones, the position of mesh vertices and the orientation of mesh normals are all stored as a vector. Quaternions are used whenever a rotation needs to be represented, such as at a joint. They have some big advantages over rotation matrices in regard to interpolation and memory usage. This is the reason why you will not find any matrices in the Cal3D library. If you ever need these rotations in a matrix representation, you can easily convert the quaternions though. 
+
+= Skeletons and Bones =
+
+The Cal3D library is designed as a skeletal-based animation system. This means that all the mesh vertices of the animated model are attached to one or more bones of an underlying skeleton structure. This makes it very easy to animate the whole model, you only need to adjust the skeleton pose and the model meshes are automatically deformed. This method of attaching meshes to a bone hierarchy is known as 'skinning'. 
+
+*Figure 3-1. Core Classes*
