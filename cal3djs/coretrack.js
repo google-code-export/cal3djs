@@ -57,35 +57,35 @@ Cal3D.CalCoreTrack.prototype.destroy = function() {
 	@returns {boolean} true if succeeded; false if any error happened.
 */
 Cal3D.CalCoreTrack.prototype.getState = function(time, translation, rotation) {
-	var iCoreKeyframeBefore, iCoreKeyframeAfter;
+	var coreKeyframeIdBefore, coreKeyframeIdAfter;
 
 	// get the key-frame after the requested time
-	iCoreKeyframeAfter = this.getUpperBound(time);
+	coreKeyframeIdAfter = this.getUpperBound(time);
 
 	// check if the time is after the last key-frame
-	if(iCoreKeyframeAfter == this.m_keyframes.length) {
+	if(coreKeyframeIdAfter == this.m_keyframes.length) {
 		// return the last key-frame state
-		iCoreKeyframeAfter--;
-		rotation.assign(this.m_keyframes[iCoreKeyframeAfter].getRotation());
-		translation.assign(this.m_keyframes[iCoreKeyframeAfter].getTranslation());
+		coreKeyframeIdAfter--;
+		rotation.assign(this.m_keyframes[coreKeyframeIdAfter].getRotation());
+		translation.assign(this.m_keyframes[coreKeyframeIdAfter].getTranslation());
 		return true;
 	}
 
 	// check if the time is before the first key-frame
-	if(iCoreKeyframeAfter == 0) {
+	if(coreKeyframeIdAfter == 0) {
 		// return the first keyframe state
-		rotation.assign(this.m_keyframes[iCoreKeyframeAfter].getRotation());
-		translation.assign(this.m_keyframes[iCoreKeyframeAfter].getTranslation());
+		rotation.assign(this.m_keyframes[coreKeyframeIdAfter].getRotation());
+		translation.assign(this.m_keyframes[coreKeyframeIdAfter].getTranslation());
 		return true;
 	}
 
 	// get the key-frame before the requested one
-	iCoreKeyframeBefore = iCoreKeyframeAfter - 1;
+	coreKeyframeIdBefore = coreKeyframeIdAfter - 1;
 
 	// get the two key-frames
 	var coreKeyframeBefore, coreKeyframeAfter;
-	coreKeyframeBefore = this.m_keyframes[iCoreKeyframeBefore];
-	coreKeyframeAfter = this.m_keyframes[iCoreKeyframeAfter];
+	coreKeyframeBefore = this.m_keyframes[coreKeyframeIdBefore];
+	coreKeyframeAfter = this.m_keyframes[coreKeyframeIdAfter];
 
 	// calculate the blending factor between the two key-frame states
 	var blendFactor = (time - coreKeyframeBefore.getTime()) / (coreKeyframeAfter.getTime() - coreKeyframeBefore.getTime());
