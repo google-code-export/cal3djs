@@ -103,12 +103,12 @@ Model.prototype.onInit = function(gl, path) {
 	var self = this;
 	var loadingCallBack = {};
 
-	loadingCallBack.onload = function(stuff, url) {
+	loadingCallBack.onload = function(loaded, url) {
 		log('Model loaded from ' + url + '\n');
 
-		var cal_model = stuff.model;
-		var scale = stuff.scale;
-		var path = stuff.path;
+		var cal_model = loaded.model;
+		var scale = loaded.scale;
+		var path = loaded.path;
 
 		cal_model.getMixer().blendCycle(self.animationId[Model.STATE_MOTION    ], 0.6, 0);
 		cal_model.getMixer().blendCycle(self.animationId[Model.STATE_MOTION + 1], 0.1, 0);
