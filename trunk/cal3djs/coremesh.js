@@ -95,44 +95,44 @@ Cal3D.CalCoreMesh.prototype.addAsMorphTarget = function(coreMesh) {
 		return -1;
 	}
 
-	var iCoreSubmesh = 0;
-	var subMorphTargetID = this.m_vectorCoreSubmesh[iCoreSubmesh].getCoreSubMorphTargetCount();
-	while(iCoreSubmesh < this.m_vectorCoreSubmesh.length) {
-		if(this.m_vectorCoreSubmesh[iCoreSubmesh].getVertexCount() != otherVectorCoreSubmesh[iCoreSubmesh].getVertexCount()) {
+	var submeshId = 0;
+	var subMorphTargetId = this.m_vectorCoreSubmesh[submeshId].getCoreSubMorphTargetCount();
+	while(submeshId < this.m_vectorCoreSubmesh.length) {
+		if(this.m_vectorCoreSubmesh[submeshId].getVertexCount() != otherVectorCoreSubmesh[submeshId].getVertexCount()) {
 			Cal3D.CalError.setLastError(Cal3D.CalError.Code.INTERNAL, 'coremesh.js');
 			return -1;
 		}
-		iCoreSubmesh++;
+		submeshId++;
 	}
 
 	/* 
 		Add the blend targets to each of the core sub meshes
 	*/
 
-	iCoreSubmesh = 0;
-	while(iCoreSubmesh < this.m_vectorCoreSubmesh.length) {
-		var vertexCount = otherVectorCoreSubmesh[iCoreSubmesh].getVertexCount();
+	submeshId = 0;
+	while(submeshId < this.m_vectorCoreSubmesh.length) {
+		var vertexCount = otherVectorCoreSubmesh[submeshId].getVertexCount();
 		var coreSubMorphTarget = new Cal3D.CalCoreSubMorphTarget;
 		if(!coreSubMorphTarget.reserve(vertexCount))
 			return -1;
 
-		var vectorVertex = otherVectorCoreSubmesh[iCoreSubmesh].getVectorVertex();
-		var iVectorVertex = 0;
+		var vectorVertex = otherVectorCoreSubmesh[submeshId].getVectorVertex();
+		var vertexId = 0;
 		for(var i=0; i<vertexCount; i++) {
 			var blendVertex = new Cal3D.CalCoreSubMorphTarget.BlendVertex;
-			blendVertex.position.assign(vectorVertex[iVectorVertex].position);
-			blendVertex.normal.assign(vectorVertex[iVectorVertex].normal);
+			blendVertex.position.assign(vectorVertex[vertexId].position);
+			blendVertex.normal.assign(vectorVertex[vertexId].normal);
 			if(!coreSubMorphTarget.setBlendVertex(i, blendVertex))
 				return -1;
 
-			iVectorVertex++;
+			vertexId++;
 		}
 
-		this.m_vectorCoreSubmesh[iCoreSubmesh].addCoreSubMorphTarget(coreSubMorphTarget);
-		iCoreSubmesh++;
+		this.m_vectorCoreSubmesh[submeshId].addCoreSubMorphTarget(coreSubMorphTarget);
+		submeshId++;
 	}
 
-	return subMorphTargetID;
+	return subMorphTargetId;
 };
 
 /**
@@ -141,8 +141,8 @@ Cal3D.CalCoreMesh.prototype.addAsMorphTarget = function(coreMesh) {
 	@param {number} factor The scale factor.
 */
 Cal3D.CalCoreMesh.prototype.scale = function(factor) {
-	for(var iCoreSubmesh=0; iCoreSubmesh<this.m_vectorCoreSubmesh.length; iCoreSubmesh++) {
-		this.m_vectorCoreSubmesh[iCoreSubmesh].scale(factor);
+	for(var submeshId=0; submeshId<this.m_vectorCoreSubmesh.length; submeshId++) {
+		this.m_vectorCoreSubmesh[submeshId].scale(factor);
 	}
 };
 
