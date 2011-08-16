@@ -63,7 +63,7 @@ Vectors and quaternions are essential elements in the internal calculations of t
 
 The Cal3DJS library is designed as a skeletal-based animation system. This means that all the mesh vertices of the animated model are attached to one or more bones of an underlying skeleton structure. This makes it very easy to animate the whole model, you only need to adjust the skeleton pose and the model meshes are automatically deformed. This method of attaching meshes to a bone hierarchy is known as 'skinning'. 
 
-*Figure 3-1. Core Classes*
+*Figure 3-1. The skinned model*
 
 http://cal3djs.googlecode.com/svn/wiki/architecture_guide_phases.gif
 
