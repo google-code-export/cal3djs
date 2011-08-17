@@ -15,10 +15,6 @@
 *****************************************************************************/
 
 
-var Cal3D = Cal3D || {};
-
-
-
 /**
 	@class CalAnimation
 */
@@ -342,7 +338,7 @@ Cal3D.CalAnimationCycle.prototype = new Cal3D.CalAnimation(new Cal3D.CalCoreAnim
 	This function interpolates the weight of the animation cycle instance to a new value in a given amount of time.
 	@param {number} weight The weight to interpolate the animation cycle instance to. 
 	@param {number} delay The time in seconds until the new weight should be reached. 
-	@returns {boolean} false if error happeded.
+	@returns {boolean} true if succeeded; false if error happened.
 */
 Cal3D.CalAnimationCycle.prototype.blend = function(weight, delay) {
   this.m_targetWeight = weight;
