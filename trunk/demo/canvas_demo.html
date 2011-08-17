@@ -13,6 +13,7 @@
 		</div>
 		<p style="font-family:Arial,sans-serif;">Tip: Speed up Cally by moving your mouse pointer onto the model :-)<p>
 	</div>
+	<script type="text/javascript" src="../cal3djs/base.js"></script>
 	<script type="text/javascript" src="../cal3djs/math.js"></script>
 	<script type="text/javascript" src="../cal3djs/bounding.js"></script>
 	<script type="text/javascript" src="../cal3djs/corematerial.js"></script>
@@ -199,7 +200,7 @@
 					renderModel();
 					adjustMotion();
 				}
-			}, 60 );
+			}, 60 /* 16 fps expected */ );
 		};
   </script>
  </BODY>
