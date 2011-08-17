@@ -15,10 +15,6 @@
 *****************************************************************************/
 
 
-var Cal3D = Cal3D || {};
-
-
-
 /**
 	@class CalCoreModel
 */
@@ -271,8 +267,8 @@ Cal3D.CalCoreModel.prototype.getCoreMaterialCount = function() {
 /**
 	Get a specified core material ID.<br />
 	This function returns the core material ID for a specified core material name or thread/core material set pair.
-	@param {string | number} The name that is associated with a core material ID, or the ID of the core material thread.
-	@param {null | number} The ID of the core material set.
+	@param {string | number} materialName The name that is associated with a core material ID, or the ID of the core material thread.
+	@param {number} coreMaterialSetId (Optional) The ID of the core material set.
 	@returns {number} ID of the core material; -1 if it does not exist.
 */
 Cal3D.CalCoreModel.prototype.getCoreMaterialId = function(materialName) {
