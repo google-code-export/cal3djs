@@ -97,6 +97,7 @@ Cal3D.CalSpringSystem.prototype.calculateVertices = function(submesh, deltaTime)
 
 			var skeleton = this.m_model.getSkeleton();
 
+			// collision detection and response
 			if(this.m_collision) {
 				var vectorBone = skeleton.getVectorBone();
 

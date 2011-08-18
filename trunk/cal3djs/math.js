@@ -485,7 +485,7 @@ Cal3D.vectorAdd = function(v0, v1) {
 };
 
 /**
-	Subtracts two vectors and return a new vector that holds the result.
+	Subtract two vectors and return a new vector that holds the result.
 */
 Cal3D.vectorSub = function(v0, v1) {
 	return new Cal3D.CalVector(v0.x - v1.x, v0.y - v1.y, v0.z - v1.z);
