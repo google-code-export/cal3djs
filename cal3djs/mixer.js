@@ -267,17 +267,17 @@ Cal3D.CalMixer.prototype.removeAction = function(id) {
 		return false;
 
 	// update all active animation actions of this model
-	var iAnimationAction = 0;
-	while(iAnimationAction < this.m_listAnimationAction.length) {
+	var animationActionId = 0;
+	while(animationActionId < this.m_listAnimationAction.length) {
 		// find the specified action and remove it
-		if(this.m_listAnimationAction[iAnimationAction].getCoreAnimation() == coreAnimation) {
+		if(this.m_listAnimationAction[animationActionId].getCoreAnimation() == coreAnimation) {
 			// found, so remove
-			this.m_listAnimationAction[iAnimationAction].completeCallbacks(this.m_model);
-			this.m_listAnimationAction.splice(iAnimationAction, 1);
+			this.m_listAnimationAction[animationActionId].completeCallbacks(this.m_model);
+			this.m_listAnimationAction.splice(animationActionId, 1);
 			return true;
 		}
 
-		iAnimationAction++;
+		animationActionId++;
 	}
 
 	return false;
@@ -304,18 +304,18 @@ Cal3D.CalMixer.prototype.updateAnimation = function(deltaTime) {
 	}
 
 	// update all active animation actions of this model
-	var iAnimationAction = 0;
-	while(iAnimationAction < this.m_listAnimationAction.length) {
-		var animationAction = this.m_listAnimationAction[iAnimationAction];
+	var animationActionId = 0;
+	while(animationActionId < this.m_listAnimationAction.length) {
+		var animationAction = this.m_listAnimationAction[animationActionId];
 		// update and check if animation action is still active
 		if(animationAction.update(deltaTime)) {
 			animationAction.checkCallbacks(animationAction.getTime(), this.m_model);
-			iAnimationAction++;
+			animationActionId++;
 		}
 		else {
 			// animation action has ended, destroy and remove it from the animation list
 			animationAction.completeCallbacks(this.m_model);
-			this.m_listAnimationAction.splice(iAnimationAction, 1);
+			this.m_listAnimationAction.splice(animationActionId, 1);
 		}
 	}
 
@@ -325,9 +325,9 @@ Cal3D.CalMixer.prototype.updateAnimation = function(deltaTime) {
 	// update the weight of all active animation cycles of this model
 	var accumulatedWeight = 0;
 	var accumulatedDuration = 0;
-	var iAnimationCycle = 0;
-	while(iAnimationCycle < this.m_listAnimationCycle.length) {
-		var animationCycle = this.m_listAnimationCycle[iAnimationCycle];
+	var animationCycleId = 0;
+	while(animationCycleId < this.m_listAnimationCycle.length) {
+		var animationCycle = this.m_listAnimationCycle[animationCycleId];
 		// update and check if animation cycle is still active
 		if(animationCycle.update(deltaTime)) {
 			// check if it is in sync. if yes, update accumulated weight and duration
@@ -337,12 +337,12 @@ Cal3D.CalMixer.prototype.updateAnimation = function(deltaTime) {
 			}
 
 			animationCycle.checkCallbacks(this.m_animationTime, this.m_model);
-			iAnimationCycle++;
+			animationCycleId++;
 		}
 		else {
 			// animation cycle has ended, destroy and remove it from the animation list
 			animationCycle.completeCallbacks(this.m_model);
-			this.m_listAnimationCycle.splice(iAnimationCycle, 1);
+			this.m_listAnimationCycle.splice(animationCycleId, 1);
 		}
 	}
 
@@ -374,8 +374,8 @@ Cal3D.CalMixer.prototype.updateSkeleton = function() {
 	var rotation = new Cal3D.CalQuaternion;
 
 	// loop through all animation actions
-	for(var iAnimationAction=0; iAnimationAction<this.m_listAnimationAction.length; iAnimationAction++) {
-		var animationAction = this.m_listAnimationAction[iAnimationAction];
+	for(var animationActionId=0; animationActionId<this.m_listAnimationAction.length; animationActionId++) {
+		var animationAction = this.m_listAnimationAction[animationActionId];
 		
 		// get the core animation instance
 		var coreAnimation = animationAction.getCoreAnimation();
@@ -384,12 +384,12 @@ Cal3D.CalMixer.prototype.updateSkeleton = function() {
 		var listCoreTrack = coreAnimation.getListCoreTrack();
 
 		// loop through all core tracks of the core animation
-		for(var iCoreTrack=0; iCoreTrack<listCoreTrack.length; iCoreTrack++) {
+		for(var coreTrackId=0; coreTrackId<listCoreTrack.length; coreTrackId++) {
 			// get the appropriate bone of the track
-			var bone = vectorBone[ listCoreTrack[iCoreTrack].getCoreBoneId() ];
+			var bone = vectorBone[ listCoreTrack[coreTrackId].getCoreBoneId() ];
 
 			// get the current translation and rotation
-			listCoreTrack[iCoreTrack].getState(animationAction.getTime(), translation, rotation);
+			listCoreTrack[coreTrackId].getState(animationAction.getTime(), translation, rotation);
 
 			// blend the bone state with the new state
 			bone.blendState(animationAction.getWeight(), translation, rotation);
@@ -400,8 +400,8 @@ Cal3D.CalMixer.prototype.updateSkeleton = function() {
 	skeleton.lockState();
 
 	// loop through all animation cycles
-	for(var iAnimationCycle=0; iAnimationCycle<this.m_listAnimationCycle.length; iAnimationCycle++) {
-		var animationCycle = this.m_listAnimationCycle[iAnimationCycle];
+	for(var animationCycleId=0; animationCycleId<this.m_listAnimationCycle.length; animationCycleId++) {
+		var animationCycle = this.m_listAnimationCycle[animationCycleId];
 
 		// get the core animation instance
 		var coreAnimation = animationCycle.getCoreAnimation();
@@ -422,12 +422,12 @@ Cal3D.CalMixer.prototype.updateSkeleton = function() {
 		var listCoreTrack = coreAnimation.getListCoreTrack();
 
 		// loop through all core tracks of the core animation
-		for(var iCoreTrack=0; iCoreTrack<listCoreTrack.length; iCoreTrack++) {
+		for(var coreTrackId=0; coreTrackId<listCoreTrack.length; coreTrackId++) {
 			// get the appropriate bone of the track
-			var bone = vectorBone[ listCoreTrack[iCoreTrack].getCoreBoneId() ];
+			var bone = vectorBone[ listCoreTrack[coreTrackId].getCoreBoneId() ];
 
 			// get the current translation and rotation
-			listCoreTrack[iCoreTrack].getState(animationTime, translation, rotation);
+			listCoreTrack[coreTrackId].getState(animationTime, translation, rotation);
 
 			// blend the bone state with the new state
 			bone.blendState(animationCycle.getWeight(), translation, rotation);
@@ -525,23 +525,24 @@ Cal3D.CalMixer.prototype.getAnimationCycle = function() {
 /**
 	Examine the given animation and if the first and last keyframe of a given track do not match up, the first key frame is duplicated 
 	and added to the end of the track to ensure smooth looping.
+	@private
 */
 Cal3D.addExtraKeyframeForLoopedAnim = function(coreAnimation) {
 	var listCoreTrack = coreAnimation.getListCoreTrack();
 	if(listCoreTrack.length == 0)
 		return;
 
-	var iCoreTrack = 0;
-	if(!listCoreTrack[iCoreTrack])
+	var coreTrackId = 0;
+	if(!listCoreTrack[coreTrackId])
 		return;
 
-	var lastKeyframe = listCoreTrack[iCoreTrack].getCoreKeyframe( listCoreTrack[iCoreTrack].getCoreKeyframeCount() - 1 );
+	var lastKeyframe = listCoreTrack[coreTrackId].getCoreKeyframe( listCoreTrack[coreTrackId].getCoreKeyframeCount() - 1 );
 	if(!lastKeyframe)
 		return;
 
 	if(lastKeyframe.getTime() < coreAnimation.getDuration()) {
-		for(iCoreTrack=0; iCoreTrack<listCoreTrack.length; iCoreTrack++) {
-			var coreTrack = listCoreTrack[iCoreTrack];
+		for(coreTrackId=0; coreTrackId<listCoreTrack.length; coreTrackId++) {
+			var coreTrack = listCoreTrack[coreTrackId];
 
 			var firstKeyframe = coreTrack.getCoreKeyframe(0);
 			var newKeyframe = new Cal3D.CalCoreKeyframe;
