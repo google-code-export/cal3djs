@@ -1,0 +1,158 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*****************************************************************************
+<span class='line'>  2</span> * Cal3D 3d character animation library
+<span class='line'>  3</span> * Copyright (C) 2001, 2002 Bruno 'Beosil' Heidelberger
+<span class='line'>  4</span> *
+<span class='line'>  5</span> * This library is free software; you can redistribute it and/or modify it
+<span class='line'>  6</span> * under the terms of the GNU Lesser General Public License as published by
+<span class='line'>  7</span> * the Free Software Foundation; either version 2.1 of the License, or (at
+<span class='line'>  8</span> * your option) any later version.
+<span class='line'>  9</span> *****************************************************************************/</span><span class="WHIT">
+<span class='line'> 10</span> 
+<span class='line'> 11</span> </span><span class="COMM">/*****************************************************************************
+<span class='line'> 12</span> * Cal3DJS Javascript port of Cal3D for WebGL and canvas applications
+<span class='line'> 13</span> * by Humu humu2009@gmail.com
+<span class='line'> 14</span> * http://code.google.com/p/cal3djs/
+<span class='line'> 15</span> *****************************************************************************/</span><span class="WHIT">
+<span class='line'> 16</span> 
+<span class='line'> 17</span> 
+<span class='line'> 18</span> </span><span class="COMM">/**
+<span class='line'> 19</span> 	@class CalCoreSkeleton
+<span class='line'> 20</span> */</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="NAME">Cal3D.CalCoreSkeleton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreBone</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="WHIT">	</span><span class="NAME">this.m_mapCoreBoneNames</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorRootCoreBoneId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 26</span> 
+<span class='line'> 27</span> </span><span class="COMM">/**
+<span class='line'> 28</span> 	Add a core bone.&lt;br />
+<span class='line'> 29</span> 	This function adds a core bone to the core skeleton instance.
+<span class='line'> 30</span> 	@param {Cal3D.CalCoreBone} coreBone The core bone to be added.
+<span class='line'> 31</span> 	@returns {number} ID of the added core bone.
+<span class='line'> 32</span> */</span><span class="WHIT">
+<span class='line'> 33</span> </span><span class="NAME">Cal3D.CalCoreSkeleton.prototype.addCoreBone</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreBone</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="WHIT">	</span><span class="COMM">// get next bone id</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">boneId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreBone.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreBone.push</span><span class="PUNC">(</span><span class="NAME">coreBone</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 37</span> 
+<span class='line'> 38</span> </span><span class="WHIT">	</span><span class="COMM">// if necessary, add the core bone to the root bone list</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreBone.getParentId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="WHIT">		</span><span class="NAME">this.m_vectorRootCoreBoneId.push</span><span class="PUNC">(</span><span class="NAME">boneId</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 42</span> 
+<span class='line'> 43</span> </span><span class="WHIT">	</span><span class="COMM">// add a reference from the bone's name to its id</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="WHIT">	</span><span class="NAME">this.mapCoreBoneName</span><span class="PUNC">(</span><span class="NAME">boneId</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">coreBone.getName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 45</span> 
+<span class='line'> 46</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">boneId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 47</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 48</span> 
+<span class='line'> 49</span> </span><span class="COMM">/**
+<span class='line'> 50</span> 	Calculate the current state.&lt;br />
+<span class='line'> 51</span> 	This function calculates the current state of the core skeleton instance by calculating all the core bone states.
+<span class='line'> 52</span> */</span><span class="WHIT">
+<span class='line'> 53</span> </span><span class="NAME">Cal3D.CalCoreSkeleton.prototype.calculateState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 54</span> </span><span class="WHIT">	</span><span class="COMM">// calculate all bone states of the skeleton</span><span class="WHIT">
+<span class='line'> 55</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iRootCoreBoneId</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">iRootCoreBoneId</span><span class="PUNC">&lt;</span><span class="NAME">this.m_vectorRootCoreBoneId.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">iRootCoreBoneId</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 56</span> </span><span class="WHIT">		</span><span class="NAME">this.m_vectorCoreBone</span><span class="PUNC">[</span><span class="NAME">this.m_vectorRootCoreBoneId</span><span class="PUNC">[</span><span class="NAME">iRootCoreBoneId</span><span class="PUNC">]</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">calculateState</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 57</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 58</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 59</span> 
+<span class='line'> 60</span> </span><span class="COMM">/**
+<span class='line'> 61</span> 	Get a core bone.&lt;br />
+<span class='line'> 62</span> 	This function returns the core bone with the given name or ID.
+<span class='line'> 63</span> 	@param {string | number} coreBoneId The name or ID of the core bone.
+<span class='line'> 64</span> 	@returns {Cal3D.CalCoreBone} The core bone.
+<span class='line'> 65</span> */</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="NAME">Cal3D.CalCoreSkeleton.prototype.getCoreBone</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreBoneId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">coreBoneId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'string'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="WHIT">		</span><span class="NAME">coreBoneId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getCoreBoneId</span><span class="PUNC">(</span><span class="NAME">coreBoneId</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 69</span> 
+<span class='line'> 70</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreBoneId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreBoneId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreBone.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coreskeleton.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 74</span> 
+<span class='line'> 75</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreBone</span><span class="PUNC">[</span><span class="NAME">coreBoneId</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 76</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 77</span> 
+<span class='line'> 78</span> </span><span class="COMM">/**
+<span class='line'> 79</span> 	Get the ID of a specified core bone.&lt;br />
+<span class='line'> 80</span> 	This function returns the ID of a specified core bone.
+<span class='line'> 81</span> 	@param {string} name The name of the core bone whose ID should be returned.
+<span class='line'> 82</span> 	@returns {number} The ID associated with the given name.
+<span class='line'> 83</span> */</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="NAME">Cal3D.CalCoreSkeleton.prototype.getCoreBoneId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 85</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">coneBoneId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.m_mapCoreBoneNames</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 86</span> </span><span class="WHIT">	</span><span class="COMM">// See if this mapping exists</span><span class="WHIT">
+<span class='line'> 87</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coneBoneId</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coreskeleton.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 89</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 90</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 91</span> 
+<span class='line'> 92</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">coneBoneId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 94</span> 
+<span class='line'> 95</span> </span><span class="COMM">/**
+<span class='line'> 96</span> 	Map the name to a specific ID of a core bone.&lt;br />
+<span class='line'> 97</span> 	This function returns true or false depending on whether the mapping was successful or not. Note that it is possible to overwrite 
+<span class='line'> 98</span> 	and existing mapping and no error will be given.
+<span class='line'> 99</span> 	@param {number} coreBoneId ID of the core bone to be associated with the name.
+<span class='line'>100</span> 	@param {string} name The name of the core bone that will be associated with the ID.
+<span class='line'>101</span> 	@returns {boolean} true if succeeded; false if failed.
+<span class='line'>102</span> */</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="NAME">Cal3D.CalCoreSkeleton.prototype.mapCoreBoneName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreBoneId</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">	</span><span class="COMM">// Make sure the given ID is a valid corebone ID</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreBoneId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreBoneId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreBone.length</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>107</span> 
+<span class='line'>108</span> </span><span class="WHIT">	</span><span class="NAME">this.m_mapCoreBoneNames</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">coreBoneId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span> 
+<span class='line'>112</span> </span><span class="COMM">/**
+<span class='line'>113</span> 	Get the root core bone ID list.&lt;br />
+<span class='line'>114</span> 	This function returns the list that contains all root core bone IDs of the core skeleton instance.
+<span class='line'>115</span> 	@returns {Array} The root core bone ID list.
+<span class='line'>116</span> */</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="NAME">Cal3D.CalCoreSkeleton.prototype.getVectorRootCoreBoneId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_vectorRootCoreBoneId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>119</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>120</span> 
+<span class='line'>121</span> </span><span class="COMM">/**
+<span class='line'>122</span> 	Get the core bone list.&lt;br />
+<span class='line'>123</span> 	This function returns the vector that contains all core bones of the core skeleton instance.
+<span class='line'>124</span> 	@returns {Array} The core bone list.
+<span class='line'>125</span> */</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="NAME">Cal3D.CalCoreSkeleton.prototype.getVectorCoreBone</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreBone</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>129</span> 
+<span class='line'>130</span> </span><span class="COMM">/**
+<span class='line'>131</span> 	Calculate bounding boxes of core bones.&lt;br />
+<span class='line'>132</span> 	This function calculates the bounding box of every bone in the core skeleton.
+<span class='line'>133</span> 	@param {Cal3D.CalCoreModel} coreModel The coreModel needed to retrieve vertices.
+<span class='line'>134</span> */</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="NAME">Cal3D.CalCoreSkeleton.prototype.calculateBoundingBoxes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreModel</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">boneId</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">boneId</span><span class="PUNC">&lt;</span><span class="NAME">this.m_vectorCoreBone.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">boneId</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">		</span><span class="NAME">this.m_vectorCoreBone</span><span class="PUNC">[</span><span class="NAME">boneId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">calculateBoundingBox</span><span class="PUNC">(</span><span class="NAME">coreModel</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>140</span> 
+<span class='line'>141</span> </span><span class="COMM">/**
+<span class='line'>142</span> 	Scale the core skeleton.&lt;br />
+<span class='line'>143</span> 	This function rescale all the data that are in the core skeleton instance.
+<span class='line'>144</span> 	@param {number} The scale factor.
+<span class='line'>145</span> */</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="NAME">Cal3D.CalCoreSkeleton.prototype.scale</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">factor</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iRootCoreBoneId</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">iRootCoreBoneId</span><span class="PUNC">&lt;</span><span class="NAME">this.m_vectorRootCoreBoneId.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">iRootCoreBoneId</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="WHIT">		</span><span class="NAME">this.m_vectorCoreBone</span><span class="PUNC">[</span><span class="NAME">iRootCoreBoneId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">scale</span><span class="PUNC">(</span><span class="NAME">factor</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>151</span> </span></pre></body></html>

@@ -1,0 +1,569 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*****************************************************************************
+<span class='line'>  2</span> * Cal3D 3d character animation library
+<span class='line'>  3</span> * Copyright (C) 2001, 2002 Bruno 'Beosil' Heidelberger
+<span class='line'>  4</span> *
+<span class='line'>  5</span> * This library is free software; you can redistribute it and/or modify it
+<span class='line'>  6</span> * under the terms of the GNU Lesser General Public License as published by
+<span class='line'>  7</span> * the Free Software Foundation; either version 2.1 of the License, or (at
+<span class='line'>  8</span> * your option) any later version.
+<span class='line'>  9</span> *****************************************************************************/</span><span class="WHIT">
+<span class='line'> 10</span> 
+<span class='line'> 11</span> </span><span class="COMM">/*****************************************************************************
+<span class='line'> 12</span> * Cal3DJS Javascript port of Cal3D for WebGL and canvas applications
+<span class='line'> 13</span> * by Humu humu2009@gmail.com
+<span class='line'> 14</span> * http://code.google.com/p/cal3djs/
+<span class='line'> 15</span> *****************************************************************************/</span><span class="WHIT">
+<span class='line'> 16</span> 
+<span class='line'> 17</span> 
+<span class='line'> 18</span> </span><span class="COMM">/**
+<span class='line'> 19</span> 	@class CalCoreModel
+<span class='line'> 20</span> */</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="NAME">Cal3D.CalCoreModel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">	</span><span class="NAME">this.m_name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="WHIT">	</span><span class="NAME">this.m_coreSkeleton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreAnimation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreMorphAnimation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreMesh</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreMaterial</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT">	</span><span class="NAME">this.m_mapmapCoreMaterialThread</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="WHIT">	</span><span class="NAME">this.m_animationName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">	</span><span class="NAME">this.m_materialName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">	</span><span class="NAME">this.m_meshName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="WHIT">	</span><span class="NAME">this.m_userData</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 33</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 34</span> 
+<span class='line'> 35</span> </span><span class="COMM">/**
+<span class='line'> 36</span> 	Get the user data&lt;br />
+<span class='line'> 37</span> 	This function returns the user data stored in the core model instance.
+<span class='line'> 38</span> 	@returns {object} The user data stored in the core model.
+<span class='line'> 39</span> */</span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getUserData</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_userData</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 43</span> 
+<span class='line'> 44</span> </span><span class="COMM">/**
+<span class='line'> 45</span> 	Store user data.&lt;br />
+<span class='line'> 46</span> 	This function stores user data in the core model instance.
+<span class='line'> 47</span> 	@param {object} userData The user data to be stored.
+<span class='line'> 48</span> */</span><span class="WHIT">
+<span class='line'> 49</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.setUserData</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">userData</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="WHIT">	</span><span class="NAME">this.m_userData</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">userData</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 52</span> 
+<span class='line'> 53</span> </span><span class="COMM">/**
+<span class='line'> 54</span> 	Scale the core model.&lt;br />
+<span class='line'> 55</span> 	This function rescale all data that are in the core model instance.
+<span class='line'> 56</span> 	@param {number} factor The scale factor.
+<span class='line'> 57</span> */</span><span class="WHIT">
+<span class='line'> 58</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.scale</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">factor</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 59</span> </span><span class="WHIT">	</span><span class="NAME">this.m_coreSkeleton.scale</span><span class="PUNC">(</span><span class="NAME">factor</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 60</span> 
+<span class='line'> 61</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">animationId</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">animationId</span><span class="PUNC">&lt;</span><span class="NAME">this.m_vectorCoreAnimation.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">animationId</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 62</span> </span><span class="WHIT">		</span><span class="NAME">this.m_vectorCoreAnimation</span><span class="PUNC">[</span><span class="NAME">animationId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">scale</span><span class="PUNC">(</span><span class="NAME">factor</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 64</span> 
+<span class='line'> 65</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">meshId</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">meshId</span><span class="PUNC">&lt;</span><span class="NAME">this.m_vectorCoreMesh.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">meshId</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">		</span><span class="NAME">this.m_vectorCoreMesh</span><span class="PUNC">[</span><span class="NAME">meshId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">scale</span><span class="PUNC">(</span><span class="NAME">factor</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 69</span> 
+<span class='line'> 70</span> </span><span class="COMM">/**
+<span class='line'> 71</span> 	Add a core animation to the core model.&lt;br />
+<span class='line'> 72</span> 	This function adds a core animation to the core model instance.
+<span class='line'> 73</span> 	@param {Cal3d.CalCoreAnimation} coreAnimation The core animation instance to be added.
+<span class='line'> 74</span> 	@returns {number} ID of the added core animation.
+<span class='line'> 75</span> */</span><span class="WHIT">
+<span class='line'> 76</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.addCoreAnimation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreAnimation</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">animationId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreAnimation.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreAnimation.push</span><span class="PUNC">(</span><span class="NAME">coreAnimation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 79</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">animationId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 80</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 81</span> 
+<span class='line'> 82</span> </span><span class="COMM">/**
+<span class='line'> 83</span> 	Get a core animation.&lt;br />
+<span class='line'> 84</span> 	This function returns the core animation with the given ID.
+<span class='line'> 85</span> 	@param {number} coreAnimationId ID of the core animation.
+<span class='line'> 86</span> 	@returns {Cal3d.CalCoreAnimation} The core animation; null if it does not exist.
+<span class='line'> 87</span> */</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getCoreAnimation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreAnimationId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 89</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreAnimationId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreAnimationId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreAnimation.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 90</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 91</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 93</span> 
+<span class='line'> 94</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreAnimation</span><span class="PUNC">[</span><span class="NAME">coreAnimationId</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 96</span> 
+<span class='line'> 97</span> </span><span class="COMM">/**
+<span class='line'> 98</span> 	Get the number of core animations.&lt;br />
+<span class='line'> 99</span> 	This function returns the number of core animations in the core model instance.
+<span class='line'>100</span> 	@returns {number} The number of core animations.
+<span class='line'>101</span> */</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getCoreAnimationCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreAnimation.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>105</span> 
+<span class='line'>106</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.loadCoreAnimation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">filename</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'not implemented error'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>109</span> 
+<span class='line'>110</span> </span><span class="COMM">/**
+<span class='line'>111</span> 	Delete the resources used by the named core animation.&lt;br />
+<span class='line'>112</span> 	The name must be associated with a valid core animation ID with the function getAnimationId(). The caller must ensure that the 
+<span class='line'>113</span> 	corresponding is not referenced anywhere otherwise unpredictable results will occur.
+<span class='line'>114</span> 	@param {number | string} ID or name of the core animation.
+<span class='line'>115</span> 	@returns {number} ID of the unloaded core animation; -1 if the core animation does not exist.
+<span class='line'>116</span> */</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.unloadCoreAnimation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreAnimationId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">coreAnimationId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'string'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>119</span> </span><span class="WHIT">		</span><span class="NAME">coreAnimationId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getCoreAnimationId</span><span class="PUNC">(</span><span class="NAME">coreAnimationId</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>120</span> 
+<span class='line'>121</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreAnimationId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreAnimationId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreAnimation.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>122</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>123</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>124</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>125</span> 
+<span class='line'>126</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreAnimation</span><span class="PUNC">[</span><span class="NAME">coreAnimationId</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">coreAnimationId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>129</span> 
+<span class='line'>130</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.saveCoreAnimation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">filename</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">coreAnimationId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'not implemented error'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>132</span> 
+<span class='line'>133</span> </span><span class="WHIT">	</span><span class="COMM">// check if the core animation id is valid</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreAnimationId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreAnimationId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreAnimation.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>138</span> 
+<span class='line'>139</span> </span><span class="WHIT">	</span><span class="COMM">// save the core animation</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">Cal3D.CalSaver.saveCoreAnimation</span><span class="PUNC">(</span><span class="NAME">filename</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreAnimation</span><span class="PUNC">[</span><span class="NAME">coreAnimationId</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>141</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>142</span> 
+<span class='line'>143</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>144</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>145</span> 
+<span class='line'>146</span> </span><span class="COMM">/**
+<span class='line'>147</span> 	Create or overwrite a string-to-animation ID mapping.&lt;br />
+<span class='line'>148</span> 	This function makes an animation ID reference-able by a string name.&lt;br />
+<span class='line'>149</span> 	Note that we don't verify that the ID is valid because the animation may be added later. Also, if there is already a helper
+<span class='line'>150</span> 	with this name, it will be overwritten without warning.
+<span class='line'>151</span> 	@param {string} name The (new) name that will be associated with the ID.
+<span class='line'>152</span> 	@param {number} coreAnimationId The ID of the animation to be referenced by the given name.
+<span class='line'>153</span> 	@returns {boolean} true if succeeded; false if any error happened. 
+<span class='line'>154</span> */</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.addAnimationName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">coreAnimationId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="WHIT">	</span><span class="COMM">// check if the core animation id is valid</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreAnimationId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreAnimationId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreAnimation.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>158</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>161</span> 
+<span class='line'>162</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreAnimation</span><span class="PUNC">[</span><span class="NAME">coreAnimationId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setName</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="WHIT">	</span><span class="NAME">this.m_animationName</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">coreAnimationId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>166</span> 
+<span class='line'>167</span> </span><span class="COMM">/**
+<span class='line'>168</span> 	Get the ID of the core animation by name.&lt;br />
+<span class='line'>169</span> 	@param {string} animationName Name associated with the ID.
+<span class='line'>170</span> 	@returns {number} ID of the core animation; -1 if there is no ID associated with the given name.
+<span class='line'>171</span> */</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getCoreAnimationId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">animationName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">coreAnimationId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.m_animationName</span><span class="PUNC">[</span><span class="NAME">animationName</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreAnimationId</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span> 
+<span class='line'>177</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.getCoreAnimation</span><span class="PUNC">(</span><span class="NAME">coreAnimationId</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>179</span> 
+<span class='line'>180</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">coreAnimationId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>182</span> 
+<span class='line'>183</span> </span><span class="COMM">/**
+<span class='line'>184</span> 	Add a core morph animation.&lt;br />
+<span class='line'>185</span> 	This function adds a core morph animation to the core model instance.
+<span class='line'>186</span> 	@param {Cal3D.CalCoreMorphAnimation} coreMorphAnimation The core morph animation to be added.
+<span class='line'>187</span> 	@returns {number} ID of the added core morph animation.
+<span class='line'>188</span> */</span><span class="WHIT">
+<span class='line'>189</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.addCoreMorphAnimation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreMorphAnimation</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>190</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">morphAnimationId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMorphAnimation.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreMorphAnimation.push</span><span class="PUNC">(</span><span class="NAME">coreMorphAnimation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">morphAnimationId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>193</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>194</span> 
+<span class='line'>195</span> </span><span class="COMM">/**
+<span class='line'>196</span> 	Get a core morph animation&lt;br />
+<span class='line'>197</span> 	This function returns the core morph animation with the given ID.
+<span class='line'>198</span> 	@param {number} ID of the core morph animation.
+<span class='line'>199</span> 	@returns {Cal3D.CalCoreMorphAnimation} The core morph animation; null if the core morph animation does not exist.
+<span class='line'>200</span> */</span><span class="WHIT">
+<span class='line'>201</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getCoreMorphAnimation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreMorphAnimationId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMorphAnimationId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreMorphAnimationId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMorphAnimation.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>204</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>205</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>206</span> 
+<span class='line'>207</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMorphAnimation</span><span class="PUNC">[</span><span class="NAME">coreMorphAnimationId</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>208</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>209</span> 
+<span class='line'>210</span> </span><span class="COMM">/**
+<span class='line'>211</span> 	Get the number of core morph animations.&lt;br />
+<span class='line'>212</span> 	This function returns the number of core morph animations in the core model instance.
+<span class='line'>213</span> 	@returns {number} The number of core morph animations.. 
+<span class='line'>214</span> */</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getCoreMorphAnimationCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMorphAnimation.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>218</span> 
+<span class='line'>219</span> </span><span class="COMM">/**
+<span class='line'>220</span> 	Add a core material.&lt;br />
+<span class='line'>221</span> 	This function adds a core material to the core model instance.
+<span class='line'>222</span> 	@param {Cal3D.CalCoreMaterial} coreMaterial The core material to be added.
+<span class='line'>223</span> 	@returns {number} ID of the added material.
+<span class='line'>224</span> */</span><span class="WHIT">
+<span class='line'>225</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.addCoreMaterial</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreMaterial</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>226</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">materialId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMaterial.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>227</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreMaterial.push</span><span class="PUNC">(</span><span class="NAME">coreMaterial</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>228</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">materialId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>229</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>230</span> 
+<span class='line'>231</span> </span><span class="COMM">/**
+<span class='line'>232</span> 	Create a core material thread.&lt;br />
+<span class='line'>233</span> 	This function creates a new core material thread with the given ID.
+<span class='line'>234</span> 	@param {number} coreMaterialThreadId The ID of the core material thread to be created.
+<span class='line'>235</span> 	@returns {boolean} true if succeeded; false if any error happened. 
+<span class='line'>236</span> */</span><span class="WHIT">
+<span class='line'>237</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.createCoreMaterialThread</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreMaterialThreadId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>238</span> </span><span class="WHIT">	</span><span class="COMM">// insert an empty core material thread with the given id</span><span class="WHIT">
+<span class='line'>239</span> </span><span class="WHIT">	</span><span class="NAME">this.m_mapmapCoreMaterialThread</span><span class="PUNC">[</span><span class="NAME">coreMaterialThreadId</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>240</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>241</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>242</span> 
+<span class='line'>243</span> </span><span class="COMM">/**
+<span class='line'>244</span> 	Get a core material.&lt;br />
+<span class='line'>245</span> 	This function returns the core material with the given ID.
+<span class='line'>246</span> 	@param {number} coreMaterialId The ID of the core material.
+<span class='line'>247</span> 	@returns {Cal3D.CalCoreMaterial} The core material; null if it does not exist.
+<span class='line'>248</span> */</span><span class="WHIT">
+<span class='line'>249</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getCoreMaterial</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreMaterialId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>250</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMaterialId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMaterial.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>251</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>252</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>253</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>254</span> 
+<span class='line'>255</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMaterial</span><span class="PUNC">[</span><span class="NAME">coreMaterialId</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>257</span> 
+<span class='line'>258</span> </span><span class="COMM">/**
+<span class='line'>259</span> 	Get the number of core materials.&lt;br />
+<span class='line'>260</span> 	This function returns the number of core materials in the core model instance.
+<span class='line'>261</span> 	@returns {number} The number of core materials.
+<span class='line'>262</span> */</span><span class="WHIT">
+<span class='line'>263</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getCoreMaterialCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMaterial.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>265</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>266</span> 
+<span class='line'>267</span> </span><span class="COMM">/**
+<span class='line'>268</span> 	Get a specified core material ID.&lt;br />
+<span class='line'>269</span> 	This function returns the core material ID for a specified core material name or thread/core material set pair.
+<span class='line'>270</span> 	@param {string | number} materialName The name that is associated with a core material ID, or the ID of the core material thread.
+<span class='line'>271</span> 	@param {number} coreMaterialSetId (Optional) The ID of the core material set.
+<span class='line'>272</span> 	@returns {number} ID of the core material; -1 if it does not exist.
+<span class='line'>273</span> */</span><span class="WHIT">
+<span class='line'>274</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getCoreMaterialId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">materialName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>275</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">arguments.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>276</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.m_materialName</span><span class="PUNC">[</span><span class="NAME">materialName</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>277</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMaterialId</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>278</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>279</span> 
+<span class='line'>280</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.getCoreMaterial</span><span class="PUNC">(</span><span class="NAME">coreMaterialId</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>281</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>282</span> 
+<span class='line'>283</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>284</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>285</span> </span><span class="WHIT">	</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">arguments.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>286</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">coreMaterialThreadId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">arguments</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>287</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">coreMaterialSetId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">arguments</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>288</span> 
+<span class='line'>289</span> </span><span class="WHIT">		</span><span class="COMM">// find the core material thread</span><span class="WHIT">
+<span class='line'>290</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">coreMaterialThread</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.m_mapmapCoreMaterialThread</span><span class="PUNC">[</span><span class="NAME">coreMaterialThreadId</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>291</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMaterialThread</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>292</span> </span><span class="WHIT">			</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>293</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>294</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>295</span> 
+<span class='line'>296</span> </span><span class="WHIT">		</span><span class="COMM">// find the core material id for the given set</span><span class="WHIT">
+<span class='line'>297</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">coreMaterialThread</span><span class="PUNC">[</span><span class="NAME">coreMaterialSetId</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>298</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMaterialId</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>299</span> </span><span class="WHIT">			</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>301</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>302</span> 
+<span class='line'>303</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>304</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>305</span> 
+<span class='line'>306</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>307</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>308</span> 
+<span class='line'>309</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.loadCoreMaterial</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">filename</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>310</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'not implemented error'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>311</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>312</span> 
+<span class='line'>313</span> </span><span class="COMM">/**
+<span class='line'>314</span> 	Delete the resources used by the named core material.&lt;br />
+<span class='line'>315</span> 	The name must be associated with a valid core material ID with the function getMaterialId(). The caller must ensure that 
+<span class='line'>316</span> 	the corresponding is not referenced anywhere otherwise unpredictable results will occur.
+<span class='line'>317</span> 	@param {string | number} coreMaterialId The symbolic name or ID of the core material to unload.
+<span class='line'>318</span> 	@returns {number} ID of the unloaded core material; -1 if it does not exist.
+<span class='line'>319</span> */</span><span class="WHIT">
+<span class='line'>320</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.unloadCoreMaterial</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreMaterialId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>321</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'string'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>322</span> </span><span class="WHIT">		</span><span class="NAME">coreMaterialId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getCoreMaterialId</span><span class="PUNC">(</span><span class="NAME">coreMaterialId</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>323</span> 
+<span class='line'>324</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMaterialId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMaterial.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>325</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>326</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>327</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>328</span> 
+<span class='line'>329</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreMaterial</span><span class="PUNC">[</span><span class="NAME">coreMaterialId</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>330</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>331</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>332</span> 
+<span class='line'>333</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.saveCoreMaterial</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">filename</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>334</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'not implemented error'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>335</span> 
+<span class='line'>336</span> </span><span class="WHIT">	</span><span class="COMM">// check if the core material id is valid</span><span class="WHIT">
+<span class='line'>337</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMaterialId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMaterial.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>338</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>339</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>340</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>341</span> 
+<span class='line'>342</span> </span><span class="WHIT">	</span><span class="COMM">// save the core animation</span><span class="WHIT">
+<span class='line'>343</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalSaver.saveCoreMaterial</span><span class="PUNC">(</span><span class="NAME">filename</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMaterial</span><span class="PUNC">[</span><span class="NAME">coreMaterialId</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>344</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>345</span> 
+<span class='line'>346</span> </span><span class="COMM">/**
+<span class='line'>347</span> 	Set a core material ID.&lt;br />
+<span class='line'>348</span> 	This function sets a core material ID for a core material thread/core material set pair.
+<span class='line'>349</span> 	@param {number} coreMaterialThreadId The ID of the core material thread.
+<span class='line'>350</span> 	@param {number} coreMaterialSetId The ID of the core maetrial set.
+<span class='line'>351</span> 	@param {number} coreMaterialId The ID of the core maetrial.
+<span class='line'>352</span> 	@returns {boolean} true if succeeded; false if failed.
+<span class='line'>353</span> */</span><span class="WHIT">
+<span class='line'>354</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.setCoreMaterialId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreMaterialThreadId</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">coreMaterialSetId</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="WHIT">	</span><span class="COMM">// find the core material thread</span><span class="WHIT">
+<span class='line'>356</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">coreMaterialThread</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.m_mapmapCoreMaterialThread</span><span class="PUNC">[</span><span class="NAME">coreMaterialThreadId</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>357</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMaterialThread</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>358</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>359</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>360</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>361</span> 
+<span class='line'>362</span> </span><span class="WHIT">	</span><span class="COMM">// set the given set id in the core material thread to the given core material id</span><span class="WHIT">
+<span class='line'>363</span> </span><span class="WHIT">	</span><span class="NAME">coreMaterialThread</span><span class="PUNC">[</span><span class="NAME">coreMaterialSetId</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="WHIT">
+<span class='line'>364</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>365</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>366</span> 
+<span class='line'>367</span> </span><span class="COMM">/**
+<span class='line'>368</span> 	Create or overwrite a string-to-core-material ID mapping.&lt;br />
+<span class='line'>369</span> 	This function makes a core material ID reference-able by a string name.&lt;br />
+<span class='line'>370</span> 	Note that we don't verify that the ID is valid because the material may be added later. Also, if there is already a helper 
+<span class='line'>371</span> 	with this name, it will be overwritten without warning.
+<span class='line'>372</span> 	@param {string} name The name that will be associated with the ID.
+<span class='line'>373</span> 	@param {number} coreMaterialId The core ID number of the material to be referenced by the name.
+<span class='line'>374</span> 	@returns {boolean} true if succeeded; false if any error happened.
+<span class='line'>375</span> */</span><span class="WHIT">
+<span class='line'>376</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.addMaterialName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>377</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMaterialId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMaterial.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>378</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>379</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>380</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>381</span> 
+<span class='line'>382</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreMaterial</span><span class="PUNC">[</span><span class="NAME">coreMaterialId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setName</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>383</span> </span><span class="WHIT">	</span><span class="NAME">this.m_materialName</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">coreMaterialId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>384</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>385</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>386</span> 
+<span class='line'>387</span> </span><span class="COMM">/**
+<span class='line'>388</span> 	Add a core mesh.&lt;br />
+<span class='line'>389</span> 	This function adds a core mesh to the core model instance.
+<span class='line'>390</span> 	@param {Cal3D.CalCoreMesh} coreMesh The core mesh to be added.
+<span class='line'>391</span> 	@returns {number} ID of the added core mesh.
+<span class='line'>392</span> */</span><span class="WHIT">
+<span class='line'>393</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.addCoreMesh</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreMesh</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>394</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">meshId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMesh.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>395</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreMesh.push</span><span class="PUNC">(</span><span class="NAME">coreMesh</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>396</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">meshId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>397</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>398</span> 
+<span class='line'>399</span> </span><span class="COMM">/**
+<span class='line'>400</span> 	Get a core mesh.&lt;br />
+<span class='line'>401</span> 	This function returns the core mesh with the given ID.
+<span class='line'>402</span> 	@param {number} coreMeshId The ID of the core mesh.
+<span class='line'>403</span> 	@returns {Cal3D.CalCoreMesh} The core mesh; null if the core mesh does not exist.
+<span class='line'>404</span> */</span><span class="WHIT">
+<span class='line'>405</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getCoreMesh</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreMeshId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>406</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMeshId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreMeshId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMesh.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>407</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>408</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>409</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>410</span> 
+<span class='line'>411</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMesh</span><span class="PUNC">[</span><span class="NAME">coreMeshId</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>412</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>413</span> 
+<span class='line'>414</span> </span><span class="COMM">/**
+<span class='line'>415</span> 	Get the number of core meshes.&lt;br />
+<span class='line'>416</span> 	This function returns the number of core meshes in the core model instance.
+<span class='line'>417</span> 	@returns {number} The number of core meshes.
+<span class='line'>418</span> */</span><span class="WHIT">
+<span class='line'>419</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getCoreMeshCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>420</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMesh.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>421</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>422</span> 
+<span class='line'>423</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.loadCoreMesh</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">filename</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>424</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'not implemented error'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>425</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>426</span> 
+<span class='line'>427</span> </span><span class="COMM">/**
+<span class='line'>428</span> 	Delete the resources used by the named core mesh.&lt;br />
+<span class='line'>429</span> 	The name must be associated with a valid core mesh Id with the function getMeshId(). The caller must ensure that the
+<span class='line'>430</span> 	corresponding is not referenced anywhere otherwise unpredictable results will occur.
+<span class='line'>431</span> 	@param {string | number} The symbolic name or ID of the core mesh to unload.
+<span class='line'>432</span> 	@returns {number} ID of the unloaded core mesh; -1 if it does not exist.
+<span class='line'>433</span> */</span><span class="WHIT">
+<span class='line'>434</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.unloadCoreMesh</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreMeshId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>435</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">coreMeshId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'string'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>436</span> </span><span class="WHIT">		</span><span class="NAME">coreMeshId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getCoreMeshId</span><span class="PUNC">(</span><span class="NAME">coreMeshId</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>437</span> 
+<span class='line'>438</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMeshId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreMeshId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMesh.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>439</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>440</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>441</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>442</span> 
+<span class='line'>443</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreMesh</span><span class="PUNC">[</span><span class="NAME">coreMeshId</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>444</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">coreMeshId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>445</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>446</span> 
+<span class='line'>447</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.saveCoreMesh</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">filename</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">coreMeshId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>448</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'not implemented error'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>449</span> 
+<span class='line'>450</span> </span><span class="WHIT">	</span><span class="COMM">// check if the core mesh id is valid</span><span class="WHIT">
+<span class='line'>451</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMeshId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreMeshId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMesh.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>452</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>453</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>454</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>455</span> 
+<span class='line'>456</span> </span><span class="WHIT">	</span><span class="COMM">// save the core mesh</span><span class="WHIT">
+<span class='line'>457</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalSaver.saveCoreMesh</span><span class="PUNC">(</span><span class="NAME">filename</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMesh</span><span class="PUNC">[</span><span class="NAME">coreMeshId</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>458</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>459</span> 
+<span class='line'>460</span> </span><span class="COMM">/**
+<span class='line'>461</span> 	Create or overwrite a string-to-core-mesh ID mapping.&lt;br />
+<span class='line'>462</span> 	This function makes a core mesh ID reference-able by a string name.&lt;br />
+<span class='line'>463</span> 	Note that we don't verify that the ID is valid because the mesh may be added later. Also, if there is already a helper with 
+<span class='line'>464</span> 	this name, it will be overwritten without warning.
+<span class='line'>465</span> 	@param {string} meshName The name that will be associated with the ID.
+<span class='line'>466</span> 	@param {number} coreMeshId The core ID number of the mesh to be referenced by the name.
+<span class='line'>467</span> 	@returns {boolean} true if succeeded; false if failed.
+<span class='line'>468</span> */</span><span class="WHIT">
+<span class='line'>469</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.addMeshName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">meshName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">coreMeshId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>470</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMeshId</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">coreMeshId</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">this.m_vectorCoreMesh.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>471</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>472</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>473</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>474</span> 
+<span class='line'>475</span> </span><span class="WHIT">	</span><span class="NAME">this.m_vectorCoreMesh</span><span class="PUNC">[</span><span class="NAME">coreMeshId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setName</span><span class="PUNC">(</span><span class="NAME">meshName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>476</span> </span><span class="WHIT">	</span><span class="NAME">this.m_meshName</span><span class="PUNC">[</span><span class="NAME">meshName</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">coreMeshId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>477</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>478</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>479</span> 
+<span class='line'>480</span> </span><span class="COMM">/**
+<span class='line'>481</span> 	Get the ID of the core mesh referenced by name.&lt;br />
+<span class='line'>482</span> 	@param {string} meshName The name that is associated with a core mesh ID.
+<span class='line'>483</span> 	@returns {number} The core mesh ID associated with the given name; -1 if it does not exist.
+<span class='line'>484</span> */</span><span class="WHIT">
+<span class='line'>485</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getCoreMeshId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">meshName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>486</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">coreMeshId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.m_meshName</span><span class="PUNC">[</span><span class="NAME">meshName</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>487</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreMeshId</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>488</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>489</span> 
+<span class='line'>490</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.getCoreMesh</span><span class="PUNC">(</span><span class="NAME">coreMeshId</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>491</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>492</span> 
+<span class='line'>493</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">coreMeshId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>494</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>495</span> 
+<span class='line'>496</span> </span><span class="COMM">/**
+<span class='line'>497</span> 	Get the core skeleton.&lt;br />
+<span class='line'>498</span> 	This function returns the core skeleton of the core model instance.
+<span class='line'>499</span> 	@returns {Cal3D.CalCoreSkeleton} The core skeleton.
+<span class='line'>500</span> */</span><span class="WHIT">
+<span class='line'>501</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getCoreSkeleton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>502</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_coreSkeleton</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>503</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>504</span> 
+<span class='line'>505</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.loadCoreSkeleton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">filename</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>506</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'not implemented error'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>507</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>508</span> 
+<span class='line'>509</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.saveCoreSkeleton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">filename</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>510</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'not implemented error'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>511</span> 
+<span class='line'>512</span> </span><span class="WHIT">	</span><span class="COMM">// check if we have a core skeleton in this code model</span><span class="WHIT">
+<span class='line'>513</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.m_coreSkeleton</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>514</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>515</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>516</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>517</span> 
+<span class='line'>518</span> </span><span class="WHIT">	</span><span class="COMM">// save the core skeleton</span><span class="WHIT">
+<span class='line'>519</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalSaver.saveCoreSkeleton</span><span class="PUNC">(</span><span class="NAME">filename</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.m_coreSkeleton</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>520</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>521</span> 
+<span class='line'>522</span> </span><span class="COMM">/**
+<span class='line'>523</span> 	Set the core skeleton of the core model.&lt;br />
+<span class='line'>524</span> 	This function sets the core skeleton of the core model instance.
+<span class='line'>525</span> 	@param {Cal3D.CalCoreSkeleton} coreSkeleton The core skeleton to be set.
+<span class='line'>526</span> */</span><span class="WHIT">
+<span class='line'>527</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.setCoreSkeleton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreSkeleton</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>528</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">coreSkeleton</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>529</span> </span><span class="WHIT">		</span><span class="NAME">Cal3D.CalError.setLastError</span><span class="PUNC">(</span><span class="NAME">Cal3D.CalError.Code.INVALID_HANDLE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'coremodel.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>530</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>531</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>532</span> 
+<span class='line'>533</span> </span><span class="WHIT">	</span><span class="NAME">this.m_coreSkeleton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">coreSkeleton</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>534</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>535</span> 
+<span class='line'>536</span> </span><span class="COMM">/**
+<span class='line'>537</span> 	Create or overwrite a string-to-boneId mapping.&lt;br />
+<span class='line'>538</span> 	This function makes a bone ID reference-able by a string name.
+<span class='line'>539</span> 	@param {string} boneName The that will be associated with the ID.
+<span class='line'>540</span> 	@param {number} boneId The ID of the bone that will be referenced by the given name.
+<span class='line'>541</span> */</span><span class="WHIT">
+<span class='line'>542</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.addBoneName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">boneName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">boneId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>543</span> </span><span class="WHIT">	</span><span class="COMM">// make sure the skeleton has been loaded first</span><span class="WHIT">
+<span class='line'>544</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.m_coreSkeleton</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>545</span> </span><span class="WHIT">		</span><span class="COMM">// map the bone ID to the name</span><span class="WHIT">
+<span class='line'>546</span> </span><span class="WHIT">		</span><span class="NAME">this.m_coreSkeleton.mapCoreBoneName</span><span class="PUNC">(</span><span class="NAME">boneId</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">boneName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>547</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>548</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>549</span> 
+<span class='line'>550</span> </span><span class="COMM">/**
+<span class='line'>551</span> 	Get the ID of the bone referenced by a name.&lt;br />
+<span class='line'>552</span> 	@param {string} boneName The name that is associated with a bone ID.
+<span class='line'>553</span> 	@returns {number} The bone ID associated with the given name; -1 if it does not exist.
+<span class='line'>554</span> */</span><span class="WHIT">
+<span class='line'>555</span> </span><span class="NAME">Cal3D.CalCoreModel.prototype.getBoneId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">boneName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>556</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.m_coreSkeleton</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>557</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_coreSkeleton.getCoreBoneId</span><span class="PUNC">(</span><span class="NAME">boneName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>558</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>559</span> 
+<span class='line'>560</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>561</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>562</span> </span></pre></body></html>
