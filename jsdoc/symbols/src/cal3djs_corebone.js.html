@@ -1,0 +1,372 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*****************************************************************************
+<span class='line'>  2</span> * Cal3D 3d character animation library
+<span class='line'>  3</span> * Copyright (C) 2001, 2002 Bruno 'Beosil' Heidelberger
+<span class='line'>  4</span> *
+<span class='line'>  5</span> * This library is free software; you can redistribute it and/or modify it
+<span class='line'>  6</span> * under the terms of the GNU Lesser General Public License as published by
+<span class='line'>  7</span> * the Free Software Foundation; either version 2.1 of the License, or (at
+<span class='line'>  8</span> * your option) any later version.
+<span class='line'>  9</span> *****************************************************************************/</span><span class="WHIT">
+<span class='line'> 10</span> 
+<span class='line'> 11</span> </span><span class="COMM">/*****************************************************************************
+<span class='line'> 12</span> * Cal3DJS Javascript port of Cal3D for WebGL and canvas applications
+<span class='line'> 13</span> * by Humu humu2009@gmail.com
+<span class='line'> 14</span> * http://code.google.com/p/cal3djs/
+<span class='line'> 15</span> *****************************************************************************/</span><span class="WHIT">
+<span class='line'> 16</span> 
+<span class='line'> 17</span> 
+<span class='line'> 18</span> </span><span class="COMM">/**
+<span class='line'> 19</span> 	@class CalCoreBone
+<span class='line'> 20</span> */</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="NAME">Cal3D.CalCoreBone</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">	</span><span class="NAME">this.m_name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="WHIT">	</span><span class="NAME">this.m_coreSkeleton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="WHIT">	</span><span class="NAME">this.m_parentId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">	</span><span class="NAME">this.m_listChildId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">	</span><span class="NAME">this.m_translation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalVector</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">	</span><span class="NAME">this.m_rotation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalQuaternion</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT">	</span><span class="NAME">this.m_translationAbsolute</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalVector</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="WHIT">	</span><span class="NAME">this.m_rotationAbsolute</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalQuaternion</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">	</span><span class="NAME">this.m_translationBoneSpace</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalVector</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">	</span><span class="NAME">this.m_rotationBoneSpace</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalQuaternion</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="WHIT">	</span><span class="NAME">this.m_userData</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 33</span> 
+<span class='line'> 34</span> </span><span class="WHIT">	</span><span class="NAME">this.m_boundingBox</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalBoundingBox</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">	</span><span class="NAME">this.m_boundingPosition</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT">		</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalVector</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="WHIT">		</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalVector</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 38</span> </span><span class="WHIT">		</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalVector</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="WHIT">		</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalVector</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="WHIT">		</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalVector</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="WHIT">		</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalVector</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="WHIT">	</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 43</span> </span><span class="WHIT">	</span><span class="NAME">this.m_boundingBoxPrecomputed</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 45</span> 
+<span class='line'> 46</span> </span><span class="COMM">/**
+<span class='line'> 47</span> 	Add a child ID.&lt;br />
+<span class='line'> 48</span> 	This function adds a core bone ID to the child ID list of the core bone instance.
+<span class='line'> 49</span> 	@param {number} childId The ID of the core bone ID that shoud be added to the child ID list.s
+<span class='line'> 50</span> 	@returns {boolean} false if any error happeded.
+<span class='line'> 51</span> */</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.addChildId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">childId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 53</span> </span><span class="WHIT">	</span><span class="NAME">this.m_listChildId.push</span><span class="PUNC">(</span><span class="NAME">childId</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 54</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 55</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 56</span> 
+<span class='line'> 57</span> </span><span class="COMM">/**
+<span class='line'> 58</span> 	Calculate the current state.&lt;br />
+<span class='line'> 59</span> 	This function calculates the current state (absolute translation and rotation) of the core bone instance and all its children.
+<span class='line'> 60</span> */</span><span class="WHIT">
+<span class='line'> 61</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.calculateState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 62</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.m_parentId</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="WHIT">		</span><span class="COMM">// no parent, this means absolute state == relative state</span><span class="WHIT">
+<span class='line'> 64</span> </span><span class="WHIT">		</span><span class="NAME">this.m_translationAbsolute.assign</span><span class="PUNC">(</span><span class="NAME">this.m_translation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="WHIT">		</span><span class="NAME">this.m_rotationAbsolute.assign</span><span class="PUNC">(</span><span class="NAME">this.m_rotation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="WHIT">	</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="WHIT">		</span><span class="COMM">// get the parent bone</span><span class="WHIT">
+<span class='line'> 69</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">parent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.m_coreSkeleton.getCoreBone</span><span class="PUNC">(</span><span class="NAME">this.m_parentId</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 70</span> 
+<span class='line'> 71</span> </span><span class="WHIT">		</span><span class="COMM">// transform relative state with the absolute state of the parent</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="WHIT">		</span><span class="NAME">this.m_translationAbsolute.assign</span><span class="PUNC">(</span><span class="NAME">this.m_translation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="WHIT">		</span><span class="NAME">this.m_translationAbsolute.multQuaternionLocal</span><span class="PUNC">(</span><span class="NAME">parent.getRotationAbsolute</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="WHIT">		</span><span class="NAME">this.m_translationAbsolute.addLocal</span><span class="PUNC">(</span><span class="NAME">parent.getTranslationAbsolute</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 75</span> 
+<span class='line'> 76</span> </span><span class="WHIT">		</span><span class="NAME">this.m_rotationAbsolute.assign</span><span class="PUNC">(</span><span class="NAME">this.m_rotation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="WHIT">		</span><span class="NAME">this.m_rotationAbsolute.multQuaternionLocal</span><span class="PUNC">(</span><span class="NAME">parent.getRotationAbsolute</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 79</span> 
+<span class='line'> 80</span> </span><span class="WHIT">	</span><span class="COMM">// calculate all child bones</span><span class="WHIT">
+<span class='line'> 81</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iChildId</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">iChildId</span><span class="PUNC">&lt;</span><span class="NAME">this.m_listChildId.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">iChildId</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 82</span> </span><span class="WHIT">		</span><span class="NAME">this.m_coreSkeleton.getCoreBone</span><span class="PUNC">(</span><span class="NAME">this.m_listChildId</span><span class="PUNC">[</span><span class="NAME">iChildId</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">calculateState</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 85</span> 
+<span class='line'> 86</span> </span><span class="COMM">/**
+<span class='line'> 87</span> 	Get the child ID list.&lt;br />
+<span class='line'> 88</span> 	This function returns the list that contains all child IDs of the core bone instance.
+<span class='line'> 89</span> 	@returns {Array} The child ID list.
+<span class='line'> 90</span> */</span><span class="WHIT">
+<span class='line'> 91</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.getListChildId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_listChildId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 94</span> 
+<span class='line'> 95</span> </span><span class="COMM">/**
+<span class='line'> 96</span> 	Get name of the core bone.&lt;br />
+<span class='line'> 97</span> 	This function returns the name of the core bone instance.
+<span class='line'> 98</span> 	@returns {string} The name of the core bone.
+<span class='line'> 99</span> */</span><span class="WHIT">
+<span class='line'>100</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.getName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>101</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>103</span> 
+<span class='line'>104</span> </span><span class="COMM">/**
+<span class='line'>105</span> 	Get the parent ID.&lt;br />
+<span class='line'>106</span> 	This function returns the parent ID of the core bone instance.
+<span class='line'>107</span> 	@returns {number} The parent ID, or -1 if this is a root core bone.
+<span class='line'>108</span> */</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.getParentId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_parentId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>112</span> 
+<span class='line'>113</span> </span><span class="COMM">/**
+<span class='line'>114</span> 	Get the core skeleton the bone is attached to.&lt;br />
+<span class='line'>115</span> 	This function returns the core skeleton this bone is attached to.
+<span class='line'>116</span> 	@returns {Cal3D.CalCoreSkeleton} The core skeleton.
+<span class='line'>117</span> */</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.getCoreSkeleton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>119</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_coreSkeleton</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>120</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>121</span> 
+<span class='line'>122</span> </span><span class="COMM">/**
+<span class='line'>123</span> 	Ger the rotation.&lt;br />
+<span class='line'>124</span> 	This function returns the relative rotation of the core bone instance.
+<span class='line'>125</span> 	@returns {Cal3D.CalQuaternion} The relative rotation to the parent as quaternion.
+<span class='line'>126</span> */</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.getRotation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_rotation</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>130</span> 
+<span class='line'>131</span> </span><span class="COMM">/**
+<span class='line'>132</span> 	Get the absolute rotation.&lt;br />
+<span class='line'>133</span> 	This function returns the absolute rotation of the core bone instance.
+<span class='line'>134</span> 	@returns {Cal3D.CalQuaternion} The absolute rotation as quaternion.
+<span class='line'>135</span> */</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.getRotationAbsolute</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_rotationAbsolute</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>139</span> 
+<span class='line'>140</span> </span><span class="COMM">/**
+<span class='line'>141</span> 	Get the bone space rotation.&lt;br />
+<span class='line'>142</span> 	This function returns the rotation to bring a point into the core bone instance space.
+<span class='line'>143</span> 	@returns {Cal3D.CalQuaternion} The bone space rotation as quaternion.
+<span class='line'>144</span> */</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.getRotationBoneSpace</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_rotationBoneSpace</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>148</span> 
+<span class='line'>149</span> </span><span class="COMM">/**
+<span class='line'>150</span> 	Get the translation.&lt;br />
+<span class='line'>151</span> 	This function returns the relative translation of the core bone instance.
+<span class='line'>152</span> 	@returns {Cal3D.CalVector} The relative translation to the parent as vector.
+<span class='line'>153</span> */</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.getTranslation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_translation</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>157</span> 
+<span class='line'>158</span> </span><span class="COMM">/**
+<span class='line'>159</span> 	Get the absolute translation.&lt;br />
+<span class='line'>160</span> 	This function returns the absolute translation of the core bone instance.
+<span class='line'>161</span> 	@returns {Cal3D.CalVector} The absolute translation as vector.
+<span class='line'>162</span> */</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.getTranslationAbsolute</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_translationAbsolute</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>166</span> 
+<span class='line'>167</span> </span><span class="COMM">/**
+<span class='line'>168</span> 	Get the bone space translation.&lt;br />
+<span class='line'>169</span> 	This function returns the translation to bring a point into the core bone instance space.
+<span class='line'>170</span> 	@returns {Cal3D.CalVector} The bone space translation as vector.
+<span class='line'>171</span> */</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.getTranslationBoneSpace</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_translationBoneSpace</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>175</span> 
+<span class='line'>176</span> </span><span class="COMM">/**
+<span class='line'>177</span> 	Get the user data.&lt;br />
+<span class='line'>178</span> 	This function returns the user data stored in the core bone instance.
+<span class='line'>179</span> 	@returns {object} The user data stored in the core bone.
+<span class='line'>180</span> */</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.getUserData</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_userData</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>183</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>184</span> 
+<span class='line'>185</span> </span><span class="COMM">/**
+<span class='line'>186</span> 	Set the core skeleton the bone is attached to.&lt;br />
+<span class='line'>187</span> 	This function sets the core skeleton to which the core bone instance is attached to.
+<span class='line'>188</span> 	@param {Cal3D.CalCoreSkeleton} coreSkeleton The core skeleton to which the core bone instance should be attached to.
+<span class='line'>189</span> */</span><span class="WHIT">
+<span class='line'>190</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.setCoreSkeleton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreSkeleton</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="WHIT">	</span><span class="NAME">this.m_coreSkeleton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">coreSkeleton</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>193</span> 
+<span class='line'>194</span> </span><span class="COMM">/**
+<span class='line'>195</span> 	Set the parent bone ID.&lt;br />
+<span class='line'>196</span> 	This function sets the parent ID of the core bone instance.
+<span class='line'>197</span> 	@param {number} parentId The ID of the parent to be set.
+<span class='line'>198</span> */</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.setParentId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">parentId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>200</span> </span><span class="WHIT">	</span><span class="NAME">this.m_parentId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parentId</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>201</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>202</span> 
+<span class='line'>203</span> </span><span class="COMM">/**
+<span class='line'>204</span> 	Set the rotation.&lt;br />
+<span class='line'>205</span> 	This function sets the relative rotation of the core bone instance.
+<span class='line'>206</span> 	@param {Cal3D.CalQuaternion} rotation The relative rotation to the parent as quaternion.
+<span class='line'>207</span> */</span><span class="WHIT">
+<span class='line'>208</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.setRotation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rotation</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>209</span> </span><span class="WHIT">	</span><span class="NAME">this.m_rotation.assign</span><span class="PUNC">(</span><span class="NAME">rotation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>210</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>211</span> 
+<span class='line'>212</span> </span><span class="COMM">/**
+<span class='line'>213</span> 	Set the bone space rotation.&lt;br />
+<span class='line'>214</span> 	This function sets the rotation that brings a point into the core bone instance space.
+<span class='line'>215</span> 	@param {Cal3D.CalQuaternion} rotation The bone space rotation to be set as quaternion.
+<span class='line'>216</span> */</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.setRotationBoneSpace</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rotation</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">	</span><span class="NAME">this.m_rotationBoneSpace.assign</span><span class="PUNC">(</span><span class="NAME">rotation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>219</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>220</span> 
+<span class='line'>221</span> </span><span class="COMM">/**
+<span class='line'>222</span> 	Set the translation.&lt;br />
+<span class='line'>223</span> 	This function sets the relative translation of the core bone instance.
+<span class='line'>224</span> 	@param {Cal3D.CalVector} translation The relative translation to the parent as vector.
+<span class='line'>225</span> */</span><span class="WHIT">
+<span class='line'>226</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.setTranslation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">translation</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>227</span> </span><span class="WHIT">	</span><span class="NAME">this.m_translation.assign</span><span class="PUNC">(</span><span class="NAME">translation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>228</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>229</span> 
+<span class='line'>230</span> </span><span class="COMM">/**
+<span class='line'>231</span> 	Set the bone space translation.&lt;br />
+<span class='line'>232</span> 	This function sets the translation that brings a point into the core bone instance space.
+<span class='line'>233</span> 	@param {Cal3D.CalVector} translation The bone space translation to be set as vector.
+<span class='line'>234</span> */</span><span class="WHIT">
+<span class='line'>235</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.setTranslationBoneSpace</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">translation</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>236</span> </span><span class="WHIT">	</span><span class="NAME">this.m_translationBoneSpace.assign</span><span class="PUNC">(</span><span class="NAME">translation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>237</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>238</span> 
+<span class='line'>239</span> </span><span class="COMM">/**
+<span class='line'>240</span> 	Set user data that should be stored inthis core bone.&lt;br />
+<span class='line'>241</span> 	This function stores user data in the core bone instance.
+<span class='line'>242</span> 	@param {object} userData The user data to be stored.
+<span class='line'>243</span> */</span><span class="WHIT">
+<span class='line'>244</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.setUserData</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">userData</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>245</span> </span><span class="WHIT">	</span><span class="NAME">this.m_userData</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">userData</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>246</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>247</span> 
+<span class='line'>248</span> </span><span class="COMM">/**
+<span class='line'>249</span> 	Calculate the bounding box.&lt;br />
+<span class='line'>250</span> 	This function Calculates the bounding box of the core bone instance.
+<span class='line'>251</span> 	@param {Cal3D.CalCoreModel} coreModel The core model needed to retrieve vertices.
+<span class='line'>252</span> */</span><span class="WHIT">
+<span class='line'>253</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.calculateBoundingBox</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">coreModel</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>254</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">boneId</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.m_coreSkeleton.getCoreBoneId</span><span class="PUNC">(</span><span class="NAME">this.m_name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>255</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bBoundsComputed</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>256</span> 
+<span class='line'>257</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rot</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalQuaternion</span><span class="PUNC">(</span><span class="NAME">this.m_rotationBoneSpace</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>258</span> </span><span class="WHIT">	</span><span class="NAME">rot.invert</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>259</span> 
+<span class='line'>260</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalVector</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>261</span> </span><span class="WHIT">	</span><span class="NAME">dir.multQuaternionLocal</span><span class="PUNC">(</span><span class="NAME">rot</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>262</span> </span><span class="WHIT">	</span><span class="NAME">this.m_boundingBox.plane</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setNormal</span><span class="PUNC">(</span><span class="NAME">dir</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>263</span> 
+<span class='line'>264</span> </span><span class="WHIT">	</span><span class="NAME">dir.assign</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>265</span> </span><span class="WHIT">	</span><span class="NAME">dir.multQuaternionLocal</span><span class="PUNC">(</span><span class="NAME">rot</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>266</span> </span><span class="WHIT">	</span><span class="NAME">this.m_boundingBox.plane</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setNormal</span><span class="PUNC">(</span><span class="NAME">dir</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>267</span> 
+<span class='line'>268</span> </span><span class="WHIT">	</span><span class="NAME">dir.assign</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>269</span> </span><span class="WHIT">	</span><span class="NAME">dir.multQuaternionLocal</span><span class="PUNC">(</span><span class="NAME">rot</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>270</span> </span><span class="WHIT">	</span><span class="NAME">this.m_boundingBox.plane</span><span class="PUNC">[</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setNormal</span><span class="PUNC">(</span><span class="NAME">dir</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>271</span> 
+<span class='line'>272</span> </span><span class="WHIT">	</span><span class="NAME">dir.assign</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>273</span> </span><span class="WHIT">	</span><span class="NAME">dir.multQuaternionLocal</span><span class="PUNC">(</span><span class="NAME">rot</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>274</span> </span><span class="WHIT">	</span><span class="NAME">this.m_boundingBox.plane</span><span class="PUNC">[</span><span class="NUMB">3</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setNormal</span><span class="PUNC">(</span><span class="NAME">dir</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>275</span> 
+<span class='line'>276</span> </span><span class="WHIT">	</span><span class="NAME">dir.assign</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>277</span> </span><span class="WHIT">	</span><span class="NAME">dir.multQuaternionLocal</span><span class="PUNC">(</span><span class="NAME">rot</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>278</span> </span><span class="WHIT">	</span><span class="NAME">this.m_boundingBox.plane</span><span class="PUNC">[</span><span class="NUMB">4</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setNormal</span><span class="PUNC">(</span><span class="NAME">dir</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>279</span> 
+<span class='line'>280</span> </span><span class="WHIT">	</span><span class="NAME">dir.assign</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>281</span> </span><span class="WHIT">	</span><span class="NAME">dir.multQuaternionLocal</span><span class="PUNC">(</span><span class="NAME">rot</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>282</span> </span><span class="WHIT">	</span><span class="NAME">this.m_boundingBox.plane</span><span class="PUNC">[</span><span class="NUMB">5</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setNormal</span><span class="PUNC">(</span><span class="NAME">dir</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>283</span> 
+<span class='line'>284</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">coreMeshCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">coreModel.getCoreMeshCount</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>285</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">meshId</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">meshId</span><span class="PUNC">&lt;</span><span class="NAME">coreMeshCount</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">meshId</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>286</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">coreMesh</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">coreModel.getCoreMesh</span><span class="PUNC">(</span><span class="NAME">meshId</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>287</span> 
+<span class='line'>288</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">coreSubmeshCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">coreMesh.getCoreSubmeshCount</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>289</span> </span><span class="WHIT">		</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">submeshId</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">submeshId</span><span class="PUNC">&lt;</span><span class="NAME">coreSubmeshCount</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">submeshId</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>290</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">coreSubmesh</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">coreMesh.getCoreSubmesh</span><span class="PUNC">(</span><span class="NAME">submeshId</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>291</span> 
+<span class='line'>292</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">coreSubmesh.getSpringCount</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>293</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">vectorVertex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">coreSubmesh.getVectorVertex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>294</span> </span><span class="WHIT">				</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">vertexId</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">vertexId</span><span class="PUNC">&lt;</span><span class="NAME">vectorVertex.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">vertexId</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>295</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">vertexInfluenceCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">vectorVertex</span><span class="PUNC">[</span><span class="NAME">vertexId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">vectorInfluence.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>296</span> </span><span class="WHIT">					</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">influenceId</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">influenceId</span><span class="PUNC">&lt;</span><span class="NAME">vertexInfluenceCount</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">influenceId</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>297</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">vectorVertex</span><span class="PUNC">[</span><span class="NAME">vertexId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">vectorInfluence</span><span class="PUNC">[</span><span class="NAME">influenceId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">boneId</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">boneId</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">vectorVertex</span><span class="PUNC">[</span><span class="NAME">vertexId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">vectorInfluence</span><span class="PUNC">[</span><span class="NAME">influenceId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">weight</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0.5</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>298</span> </span><span class="WHIT">							</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">planeId</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">planeId</span><span class="PUNC">&lt;</span><span class="NUMB">6</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">planeId</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>299</span> </span><span class="WHIT">								</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">this.m_boundingBox.plane</span><span class="PUNC">[</span><span class="NAME">planeId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">eval</span><span class="PUNC">(</span><span class="NAME">vectorVertex</span><span class="PUNC">[</span><span class="NAME">vertexId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">position</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="WHIT">									</span><span class="NAME">this.m_boundingBox.plane</span><span class="PUNC">[</span><span class="NAME">planeId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setPosition</span><span class="PUNC">(</span><span class="NAME">vectorVertex</span><span class="PUNC">[</span><span class="NAME">vertexId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">position</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>301</span> </span><span class="WHIT">									</span><span class="NAME">this.m_boundingPosition</span><span class="PUNC">[</span><span class="NAME">planeId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">assign</span><span class="PUNC">(</span><span class="NAME">vectorVertex</span><span class="PUNC">[</span><span class="NAME">vertexId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">position</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>302</span> </span><span class="WHIT">									</span><span class="NAME">bBoundsComputed</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>303</span> </span><span class="WHIT">								</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>304</span> </span><span class="WHIT">							</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>305</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>306</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>307</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>308</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>309</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>310</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>311</span> 
+<span class='line'>312</span> </span><span class="WHIT">	</span><span class="COMM">// to handle bones with no vertices assigned </span><span class="WHIT">
+<span class='line'>313</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">bBoundsComputed</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>314</span> </span><span class="WHIT">		</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">planeId</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">planeId</span><span class="PUNC">&lt;</span><span class="NUMB">6</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">planeId</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>315</span> </span><span class="WHIT">			</span><span class="NAME">this.m_boundingBox.plane</span><span class="PUNC">[</span><span class="NAME">planeId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setPosition</span><span class="PUNC">(</span><span class="NAME">this.m_translation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>316</span> </span><span class="WHIT">			</span><span class="NAME">this.m_boundingPosition</span><span class="PUNC">[</span><span class="NAME">planeId</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">assign</span><span class="PUNC">(</span><span class="NAME">this.m_translation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>317</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>318</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>319</span> 
+<span class='line'>320</span> </span><span class="WHIT">	</span><span class="NAME">this.m_boundingBoxPrecomputed</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>321</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>322</span> 
+<span class='line'>323</span> </span><span class="COMM">/**
+<span class='line'>324</span> 	Get the current bounding box.&lt;br />
+<span class='line'>325</span> 	This function returns the current bounding box of the core bone instance.
+<span class='line'>326</span> 	@returns {Cal3D.CalBoundingBox} The current bounding box of the core bone.
+<span class='line'>327</span> */</span><span class="WHIT">
+<span class='line'>328</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.getBoundingBox</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>329</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_boundingBox</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>330</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>331</span> 
+<span class='line'>332</span> </span><span class="COMM">/**
+<span class='line'>333</span> 	@private
+<span class='line'>334</span> */</span><span class="WHIT">
+<span class='line'>335</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.getBoundingData</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">planeId</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>336</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">position</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>337</span> </span><span class="WHIT">		</span><span class="NAME">position</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Cal3D.CalVector</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>338</span> 
+<span class='line'>339</span> </span><span class="WHIT">	</span><span class="NAME">position.assign</span><span class="PUNC">(</span><span class="NAME">this.m_boundingPosition</span><span class="PUNC">[</span><span class="NAME">planeId</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>340</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>341</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>342</span> 
+<span class='line'>343</span> </span><span class="COMM">/**
+<span class='line'>344</span> 	@private
+<span class='line'>345</span> */</span><span class="WHIT">
+<span class='line'>346</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.isBoundingBoxPrecomputed</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>347</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.m_boundingBoxPrecomputed</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>348</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>349</span> 
+<span class='line'>350</span> </span><span class="COMM">/**
+<span class='line'>351</span> 	Scale the core bone.&lt;br />
+<span class='line'>352</span> 	This function rescale all the data that are in the core bone instance and in all its children.
+<span class='line'>353</span> 	@param {number} factor The scale factor.
+<span class='line'>354</span> */</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="NAME">Cal3D.CalCoreBone.prototype.scale</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">factor</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>356</span> </span><span class="WHIT">	</span><span class="NAME">this.m_translation.multScalarLocal</span><span class="PUNC">(</span><span class="NAME">factor</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>357</span> </span><span class="WHIT">	</span><span class="NAME">this.m_translationAbsolute.multScalarLocal</span><span class="PUNC">(</span><span class="NAME">factor</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>358</span> </span><span class="WHIT">	</span><span class="NAME">this.m_translationBoneSpace.multScalarLocal</span><span class="PUNC">(</span><span class="NAME">factor</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>359</span> 
+<span class='line'>360</span> </span><span class="WHIT">	</span><span class="COMM">// calculate all child bones</span><span class="WHIT">
+<span class='line'>361</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iChildId</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">iChildId</span><span class="PUNC">&lt;</span><span class="NAME">this.m_listChildId.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">iChildId</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT">	</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>362</span> </span><span class="WHIT">		</span><span class="NAME">this.m_coreSkeleton.getCoreBone</span><span class="PUNC">(</span><span class="NAME">this.m_listChildId</span><span class="PUNC">[</span><span class="NAME">iChildId</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">scale</span><span class="PUNC">(</span><span class="NAME">factor</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>363</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>364</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>365</span> </span></pre></body></html>
