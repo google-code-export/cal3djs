@@ -94,7 +94,7 @@ CallyDemo.prototype.draw = function(gl) {
 	var w = this.ui.width;
 	var h = this.ui.height;
 
-	// clear frame buffers
+	// clear the framebuffers
 	gl.clearColor(0, 0, 0.2, 1);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
 
