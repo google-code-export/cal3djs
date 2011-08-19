@@ -421,29 +421,22 @@ Model.prototype.renderMesh = function(gl, xform, model) {
 				// select mesh and submesh for further data access
 				cal_renderer.selectMeshSubmesh(meshId, submeshId);
 
+				var colorBuffer = [0, 0, 0, 0];
+
 				// get the material ambient color
-				var ambientColor = [0, 0, 0, 0];
-				cal_renderer.getAmbientColor(ambientColor);
-				ambientColor[0] /= 255;
-				ambientColor[1] /= 255;
-				ambientColor[2] /= 255;
-				ambientColor[3] /= 255;
+				var ambientColor;
+				cal_renderer.getAmbientColor(colorBuffer);
+				ambientColor = [ colorBuffer[0] / 255, colorBuffer[1] / 255, colorBuffer[2] / 255 ];
 
 				// get the material diffuse color
-				var diffuseColor = [0, 0, 0, 0];
-				cal_renderer.getDiffuseColor(diffuseColor);
-				diffuseColor[0] /= 255;
-				diffuseColor[1] /= 255;
-				diffuseColor[2] /= 255;
-				diffuseColor[3] /= 255;
+				var diffuseColor;
+				cal_renderer.getDiffuseColor(colorBuffer);
+				diffuseColor = [ colorBuffer[0] / 255, colorBuffer[1] / 255, colorBuffer[2] / 255 ];
 
 				// get the material specular color
-				var specularColor = [0, 0, 0, 0];
-				cal_renderer.getSpecularColor(specularColor);
-				specularColor[0] /= 255;
-				specularColor[1] /= 255;
-				specularColor[2] /= 255;
-				specularColor[3] /= 255;
+				var specularColor;
+				cal_renderer.getSpecularColor(colorBuffer);
+				specularColor = [ colorBuffer[0] / 255, colorBuffer[1] / 255, colorBuffer[2] / 255 ];
 
 				// get the material shininess factor
 				var shininess = 50;
