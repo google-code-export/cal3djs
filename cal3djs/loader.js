@@ -314,7 +314,7 @@ Cal3D.CalLoader.loadCoreAnimationFromData = function(data, skel) {
 	var version = datasource.readInteger();
 	if( isNaN(version) || version < Cal3D.CalLibraryConstants.EARLIEST_COMPATIBLE_FILE_VERSION || 
 		version > Cal3D.CalLibraryConstants.CURRENT_FILE_VERSION ) {
-		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INVALID_FILE_FORMAT, 'loader.js');
+		Cal3D.CalError.setLastError(Cal3D.CalError.Code.INCOMPATIBLE_FILE_VERSION, 'loader.js');
 		return null;
 	}
 
