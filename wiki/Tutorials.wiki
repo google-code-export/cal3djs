@@ -13,7 +13,7 @@ var myCoreModel = new Cal3D.CalCoreModel('myHero');
 
 == Data Loading ==
 
-The next step is to load the skeleton data. Note that there can be only one skeleton per core model and it should be loaded before any other type of data. Use the Cal3D.CalLoader.loadCoreSkeletonFromFile() function to do this by providing the URL of the skeleton file and a callback object to retrieve the loaded core model or some information in case that any error happened.
+The next step is to load the skeleton data. Note that there can be only one skeleton per core model and it should be loaded before any other type of data. Use the Cal3D.CalLoader.loadCoreSkeletonFromFile() function to do this by providing the URL of the skeleton file and a callback object to retrieve the loaded core model or some useful information in case that any error happened.
 {{{
 var skeletonCallback = {};
 
@@ -30,4 +30,49 @@ skeletonCallback.onprogress = function(progress, url) {
 };
 
 Cal3D.CalLoader.loadCoreSkeletonFromFile('hero.xsf', skeletonCallback);
+}}}
+
+Now that the skeleton has been loaded successfully, the animation, mesh and material data can now be loaded in any order. Use Cal3D.CalLoader.loadCoreAnimationFromFile(), Cal3D.CalLoader.loadCoreMeshFromFile() and Cal3D.CalLoader.loadCoreMaterialFromFile() function to do these. 
+{{{
+// assumimg the core skeleton has been loaded successfully and set to the core model
+
+var idleCoreAnimationId, walkCoreAnimationId, limpCoreAnimationId, waveCoreAnimationId;
+
+var animationCallback = {};
+
+animationCallback.onload = function(coreAnimation, url) {
+	switch(url) {
+	case 'hero_idle.xaf':
+		idleCoreAnimationId = myCoreModel.addCoreAnimation(coreAnimation);
+		break;
+	case 'hero_walk.xaf':
+		walkCoreAnimationId = myCoreModel.addCoreAnimation(coreAnimation);
+		break;
+	case 'hero_limp.xaf':
+		limpCoreAnimationId = myCoreModel.addCoreAnimation(coreAnimation);
+		break;
+	case 'hero_wave.xaf':
+		waveCoreAnimationId = myCoreModel.addCoreAnimation(coreAnimation);
+		break;
+	default:
+		break;
+	}
+};
+
+animationCallback.onerror = function(errorCode, url) {
+	// error handling ...
+};
+
+animationCallback.onprogress = function(progress, url) {
+	// show progress ...
+};
+
+// get the core skeleton from the core model
+var myCoreSkeleton = myCoreModel.getCoreSkeleton();
+
+Cal3D.CalLoader.loadCoreAnimationFromFile('hero_idle.xaf', myCoreSkeleton, animationCallback);
+Cal3D.CalLoader.loadCoreAnimationFromFile('hero_walk.xaf', myCoreSkeleton, animationCallback);
+Cal3D.CalLoader.loadCoreAnimationFromFile('hero_limp.xaf', myCoreSkeleton, animationCallback);
+Cal3D.CalLoader.loadCoreAnimationFromFile('hero_wave.xaf', myCoreSkeleton, animationCallback);
+
 }}}
