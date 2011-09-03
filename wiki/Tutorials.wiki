@@ -37,6 +37,7 @@ Now that the skeleton has been loaded successfully, the animation, meshe and mat
 /*
     Animation Data Loading
 */
+
 // assumimg the core skeleton has been loaded successfully and set to the core model
 
 var idleCoreAnimationId, walkCoreAnimationId, limpCoreAnimationId, waveCoreAnimationId;
@@ -82,6 +83,7 @@ Cal3D.CalLoader.loadCoreAnimationFromFile('hero_wave.xaf', myCoreSkeleton, anima
 /*
     Mesh Data Loading
 */
+
 var upperBodyCoreMeshId, lowerBodyCoreMeshId, helmetCoreMeshId;
 
 var meshCallback = {};
@@ -118,6 +120,7 @@ Cal3D.CalLoader.loadCoreMeshFromFile('hero_helmet.xmf', meshCallback);
 /*
     Material Data Loading
 */
+
 var upperBodyChainmailCoreMaterialId, upperBodyPlatemailCoreMaterialId;
 var lowerBodyChainmailCoreMaterialId, lowerBodyPlatemailCoreMaterialId;
 
@@ -154,4 +157,39 @@ Cal3D.CalLoader.loadCoreMaterialFromFile('hero_upperbody_chainmail.xrf', materia
 Cal3D.CalLoader.loadCoreMaterialFromFile('hero_upperbody_platemail.xrf', materialCallback);
 Cal3D.CalLoader.loadCoreMaterialFromFile('hero_lowerbody_chainmail.xrf', materialCallback);
 Cal3D.CalLoader.loadCoreMaterialFromFile('hero_lowerbody_platemail.xrf', materialCallback);
+}}}
+
+== Material System Setup ==
+
+Depending on the model type and the required functionality, a few additional steps should be done to make the material handling work properly.<br>
+Textures are not handled by the Cal3DJS library directly, because of all the different ways they are needed and managed in the applications. However, there is flexible system in place to support the texture handling as much as possible.<br>
+In every map of each material there is an identifier stored. This value is written during the exporting process, and is most likely the filename of a texture. The idea is to use this value to load the texture, and reference it afterwards through a user-defined data that can be stored in every core material map at runtime. <br>
+Useful functions to get all the core materials of the core model are Cal3D.CalCoreModel.getCoreMaterialCount() and Cal3D.CalCoreModel.getCoreMaterial(). The number of maps in a core material is returned by the Cal3D.CalCoreMaterial.getMapCount() function. Access to the filename of each map is provided through Cal3D.CalCoreMaterial.getMapFilename(). User-data, such as an identifier of the loaded texture, can be stored in the core material map with help of the Cal3D.CalCoreMaterial.setMapUserData() function. It can later be retrieved by calling getUserMapData(). 
+{{{
+/*
+    load all textures and store their as user-data in the corresponding core material map
+*/
+
+var onTextureLoad = function(texture, coreMaterial, mapId) {
+    // store the texture object as user-data in the core material map
+    coreMaterial.setMapUserData(mapId, texture);
+};
+
+var materialCount = myCoreModel.getCoreMaterialCount();
+for(var materialId=0; materialId<materialCount; materialId++) {
+    // get the current core material
+    var coreMaterial = coreModel.getCoreMaterial(materialId);
+
+    // loop through all maps of the current core material
+    var mapCount = coreMaterial.getMapCount();
+    for(var mapId=0; mapId<mapCount; mapId++) {
+        // load the texture from file
+        var filename = coreMaterial.getMapFilename(mapId);
+        var url = filename;    // or myTexturePath + filename
+
+        // the function that is responsible for loading and creating a graphic-API dependent 
+        // (canvas, WebGL, etc.) texture object and calls onTextureLoad when done
+        myTextureLoadingCreatingFunction(url, coreMaterial, mapId, onTextureLoad);
+    }
+}
 }}}
