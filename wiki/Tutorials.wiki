@@ -1,13 +1,12 @@
 #summary This document describes how to use Cal2DJS in your projects.
 
-= Introduction =
+= Core Model Handling =
 
-Add your content here.
+In Cal3DJS, every model instance is based on a core model, which therefore must be created first. All the shared data, such as animations, meshes and materials, need to be loaded, and a few additional steps are necessary to finish the setup of the material handling. 
 
+== Creation ==
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+First of all, we need to create an instance of the Cal3D.CalCoreModel class. The constructor take a single argument as a description of the core model.
+{{{
+var myCoreModel = new Cal3D.CalCoreModel('myHero');
+}}}
