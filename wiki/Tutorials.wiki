@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#This document describes how to use Cal2DJS in your projects.
 
 = Introduction =
 
