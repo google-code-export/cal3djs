@@ -35,7 +35,7 @@ Cal3D.CalLoader.loadCoreSkeletonFromFile('hero.xsf', skeletonCallback);
 Now that the skeleton has been loaded successfully, the animation, meshe and material data can now be loaded in any order. Use Cal3D.CalLoader.loadCoreAnimationFromFile(), Cal3D.CalLoader.loadCoreMeshFromFile() and Cal3D.CalLoader.loadCoreMaterialFromFile() functions to do these. 
 {{{
 /*
-    load the animations
+    Animation Data Loading
 */
 // assumimg the core skeleton has been loaded successfully and set to the core model
 
@@ -77,5 +77,81 @@ Cal3D.CalLoader.loadCoreAnimationFromFile('hero_idle.xaf', myCoreSkeleton, anima
 Cal3D.CalLoader.loadCoreAnimationFromFile('hero_walk.xaf', myCoreSkeleton, animationCallback);
 Cal3D.CalLoader.loadCoreAnimationFromFile('hero_limp.xaf', myCoreSkeleton, animationCallback);
 Cal3D.CalLoader.loadCoreAnimationFromFile('hero_wave.xaf', myCoreSkeleton, animationCallback);
+}}}
+{{{
+/*
+    Mesh Data Loading
+*/
+var upperBodyCoreMeshId, lowerBodyCoreMeshId, helmetCoreMeshId;
 
+var meshCallback = {};
+
+meshCallback.onload = function(coreMesh, url) {
+    switch(url) {
+    case 'hero_upperbody.xmf':
+        upperBodyCoreMeshId = myCoreModel.addCoreMesh(coreMesh);
+        break;
+    case 'hero_lowerbody.xmf':
+        lowerBodyCoreMeshId = myCoreModel.addCoreMesh(coreMesh);
+        break;
+    case 'hero_helmet.xmf':
+        helmetCoreMeshId = myCoreModel.addCoreMesh(coreMesh);
+        break;
+    default:
+        break;
+    }
+};
+
+meshCallback.onerror = function(errorCode, url) {
+    // error handling ...
+};
+
+meshCallback.onprogress = function(progress, url) {
+    // show progress ...
+};
+
+Cal3D.CalLoader.loadCoreMeshFromFile('hero_upperbody.xmf', meshCallback);
+Cal3D.CalLoader.loadCoreMeshFromFile('hero_lowerbody.xmf', meshCallback);
+Cal3D.CalLoader.loadCoreMeshFromFile('hero_helmet.xmf', meshCallback);
+}}}
+{{{
+/*
+    Material Data Loading
+*/
+var upperBodyChainmailCoreMaterialId, upperBodyPlatemailCoreMaterialId;
+var lowerBodyChainmailCoreMaterialId, lowerBodyPlatemailCoreMaterialId;
+
+var materialCallback = {};
+
+materialCallback.onload = function(coreMaterial, url) {
+    switch(url) {
+    case 'hero_upperbody_chainmail.xrf':
+        upperBodyChainmailCoreMaterialId = myCoreModel.addCoreMaterial(coreMaterial);
+        break;
+    case 'hero_upperbody_platemail.xrf':
+        upperBodyPlatemailCoreMaterialId = myCoreModel.addCoreMaterial(coreMaterial);
+        break;
+    case 'hero_lowerbody_chainmail.xrf':
+        lowerBodyChainmailCoreMaterialId = myCoreModel.addCoreMaterial(coreMaterial);
+        break;
+    case 'hero_lowerbody_platemail.xrf':
+        lowerBodyPlatemailCoreMaterialId = myCoreModel.addCoreMaterial(coreMaterial);
+        break;
+    default:
+        break;
+    }
+};
+
+materialCallback.onerror = function(errorCode, url) {
+    // error handling ...
+};
+
+materialCallback.onprogress = function(progress, url) {
+    // show progress ...
+};
+
+Cal3D.CalLoader.loadCoreMaterialFromFile('hero_upperbody_chainmail.xrf', materialCallback);
+Cal3D.CalLoader.loadCoreMaterialFromFile('hero_upperbody_platemail.xrf', materialCallback);
+Cal3D.CalLoader.loadCoreMaterialFromFile('hero_lowerbody_chainmail.xrf', materialCallback);
+Cal3D.CalLoader.loadCoreMaterialFromFile('hero_lowerbody_platemail.xrf', materialCallback);
 }}}
