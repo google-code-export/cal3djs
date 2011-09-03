@@ -32,10 +32,10 @@ skeletonCallback.onprogress = function(progress, url) {
 Cal3D.CalLoader.loadCoreSkeletonFromFile('hero.xsf', skeletonCallback);
 }}}
 
-Now that the skeleton has been loaded successfully, the animation, mesh and material data can now be loaded in any order. Use Cal3D.CalLoader.loadCoreAnimationFromFile(), Cal3D.CalLoader.loadCoreMeshFromFile() and Cal3D.CalLoader.loadCoreMaterialFromFile() functions to do these. 
+Now that the skeleton has been loaded successfully, the animation, meshe and material data can now be loaded in any order. Use Cal3D.CalLoader.loadCoreAnimationFromFile(), Cal3D.CalLoader.loadCoreMeshFromFile() and Cal3D.CalLoader.loadCoreMaterialFromFile() functions to do these. 
 {{{
 /*
-	
+    load the animations
 */
 // assumimg the core skeleton has been loaded successfully and set to the core model
 
@@ -44,30 +44,30 @@ var idleCoreAnimationId, walkCoreAnimationId, limpCoreAnimationId, waveCoreAnima
 var animationCallback = {};
 
 animationCallback.onload = function(coreAnimation, url) {
-	switch(url) {
-	case 'hero_idle.xaf':
-		idleCoreAnimationId = myCoreModel.addCoreAnimation(coreAnimation);
-		break;
-	case 'hero_walk.xaf':
-		walkCoreAnimationId = myCoreModel.addCoreAnimation(coreAnimation);
-		break;
-	case 'hero_limp.xaf':
-		limpCoreAnimationId = myCoreModel.addCoreAnimation(coreAnimation);
-		break;
-	case 'hero_wave.xaf':
-		waveCoreAnimationId = myCoreModel.addCoreAnimation(coreAnimation);
-		break;
-	default:
-		break;
-	}
+    switch(url) {
+    case 'hero_idle.xaf':
+        idleCoreAnimationId = myCoreModel.addCoreAnimation(coreAnimation);
+        break;
+    case 'hero_walk.xaf':
+        walkCoreAnimationId = myCoreModel.addCoreAnimation(coreAnimation);
+        break;
+    case 'hero_limp.xaf':
+        limpCoreAnimationId = myCoreModel.addCoreAnimation(coreAnimation);
+        break;
+    case 'hero_wave.xaf':
+        waveCoreAnimationId = myCoreModel.addCoreAnimation(coreAnimation);
+        break;
+    default:
+        break;
+    }
 };
 
 animationCallback.onerror = function(errorCode, url) {
-	// error handling ...
+    // error handling ...
 };
 
 animationCallback.onprogress = function(progress, url) {
-	// show progress ...
+    // show progress ...
 };
 
 // get the core skeleton from the core model
