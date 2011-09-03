@@ -18,22 +18,25 @@ The next step is to load the skeleton data. Note that there can be only one skel
 var skeletonCallback = {};
 
 skeletonCallback.onload = function(coreSkeleton, url) {
-	myCoreModel.setCoreSkeleton(coreSkeleton);
+    myCoreModel.setCoreSkeleton(coreSkeleton);
 };
 
 skeletonCallback.onerror = function(errorCode, url) {
-	// error handling ...
+    // error handling ...
 };
 
 skeletonCallback.onprogress = function(progress, url) {
-	// show progress ...
+    // show progress ...
 };
 
 Cal3D.CalLoader.loadCoreSkeletonFromFile('hero.xsf', skeletonCallback);
 }}}
 
-Now that the skeleton has been loaded successfully, the animation, mesh and material data can now be loaded in any order. Use Cal3D.CalLoader.loadCoreAnimationFromFile(), Cal3D.CalLoader.loadCoreMeshFromFile() and Cal3D.CalLoader.loadCoreMaterialFromFile() function to do these. 
+Now that the skeleton has been loaded successfully, the animation, mesh and material data can now be loaded in any order. Use Cal3D.CalLoader.loadCoreAnimationFromFile(), Cal3D.CalLoader.loadCoreMeshFromFile() and Cal3D.CalLoader.loadCoreMaterialFromFile() functions to do these. 
 {{{
+/*
+	
+*/
 // assumimg the core skeleton has been loaded successfully and set to the core model
 
 var idleCoreAnimationId, walkCoreAnimationId, limpCoreAnimationId, waveCoreAnimationId;
