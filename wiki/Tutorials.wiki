@@ -1,4 +1,4 @@
-#This document describes how to use Cal2DJS in your projects.
+#summary This document describes how to use Cal2DJS in your projects.
 
 = Introduction =
 
