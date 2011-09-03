@@ -164,7 +164,7 @@ Cal3D.CalLoader.loadCoreMaterialFromFile('hero_lowerbody_platemail.xrf', materia
 Depending on the model type and the required functionality, a few additional steps should be done to make the material handling work properly.<br>
 Textures are not handled by the Cal3DJS library directly, because of all the different ways they are needed and managed in the applications. However, there is flexible system in place to support the texture handling as much as possible.<br>
 In every map of each material there is an identifier stored. This value is written during the exporting process, and is most likely the filename of a texture. The idea is to use this value to load the texture, and reference it afterwards through a user-defined data that can be stored in every core material map at runtime. <br>
-Useful functions to get all the core materials of the core model are Cal3D.CalCoreModel.getCoreMaterialCount() and Cal3D.CalCoreModel.getCoreMaterial(). The number of maps in a core material is returned by the Cal3D.CalCoreMaterial.getMapCount() function. Access to the filename of each map is provided through Cal3D.CalCoreMaterial.getMapFilename(). User-data, such as an identifier of the loaded texture, can be stored in the core material map with help of the Cal3D.CalCoreMaterial.setMapUserData() function. It can later be retrieved by calling getUserMapData(). 
+Useful functions to get all the core materials of the core model are Cal3D.CalCoreModel.getCoreMaterialCount() and Cal3D.CalCoreModel.getCoreMaterial(). The number of maps in a core material is returned by the Cal3D.CalCoreMaterial.getMapCount() function. Access to the filename of each map is provided through Cal3D.CalCoreMaterial.getMapFilename(). User-data, such as an identifier of the loaded texture, can be stored in the core material map with help of the Cal3D.CalCoreMaterial.setMapUserData() function. It can later be retrieved by calling Cal3D.CalCoreMaterialgetUserMapData(). 
 {{{
 /*
     Load all textures and store them as user-data in the corresponding core material map
@@ -215,3 +215,7 @@ myCoreModel.setCoreMaterialId(UPPER_BODY_MATERIAL_THREAD, PLATEMAIL_MATERIAL_SET
 myCoreModel.setCoreMaterialId(LOWER_BODY_MATERIAL_THREAD, CHAINMAIL_MATERIAL_SET, lowerBodyChainmailCoreMaterialId);
 myCoreModel.setCoreMaterialId(LOWER_BODY_MATERIAL_THREAD, PLATEMAIL_MATERIAL_SET, lowerBodyPlatemailCoreMaterialId);
 }}}
+
+= Model Instance Handling =
+
+[TODO]
