@@ -218,4 +218,11 @@ myCoreModel.setCoreMaterialId(LOWER_BODY_MATERIAL_THREAD, PLATEMAIL_MATERIAL_SET
 
 = Model Instance Handling =
 
-[TODO]
+After the initialization of a core model, an unlimited number of model instances can be created from it. Each of them has its own state, such as attached meshes, active animations or level-of-detail settings.
+
+== Creation ==
+
+We create a model instance by simply calling the constructor of Cal3D.CalModel class, passing in the core model it should be based on.
+{{{
+var myModel = new Cal3D.CalModel(myCoreModel);
+}}}
