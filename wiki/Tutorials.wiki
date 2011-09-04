@@ -1,4 +1,4 @@
-#summary This document describes how to use Cal2DJS in your projects.
+#summary This document describes how to use Cal2DJS in our projects.
 
 = Core Model Handling =
 
@@ -193,7 +193,7 @@ for(var materialId=0; materialId<materialCount; materialId++) {
     }
 }
 }}}
-If you want to use the built-in material management system of the Cal3DJS library to handle different material sets and threads, you have to initialize it accordingly. This is done by creating all material threads of the core model by calling Cal3D.CalCoreModel.createCoreMaterialThread() for each of them. Then, the Cal3D.CalCoreModel.setCoreMaterialId() is used to assign a material to a specific material thread/set pair.
+If we want to use the built-in material management system of the Cal3DJS library to handle different material sets and threads, we have to initialize it accordingly. This is done by creating all material threads of the core model by calling Cal3D.CalCoreModel.createCoreMaterialThread() for each of them. Then, the Cal3D.CalCoreModel.setCoreMaterialId() is used to assign a material to a specific material thread/set pair.
 {{{
 /*
     Material thread/set setup
@@ -238,12 +238,42 @@ We can them attach another mesh or detach an existing mesh. To detach an attache
 {{{
 myModel.detachMesh(upperBodyCoreMeshId);
 }}}
+Now we have a complete Cal3dJS model instance that can be animated and rendered in our scene.
+
+== Model Loading From a Config File ==
+
+Since the creation and data loading of a core model and then a model instance are rather boring and tedious routine operations, the Cal3dJS library provide a convenient way to do these all together: we can write a config file and then load the entire model instance with a single call.
+{{{
+var myModel;
+
+var modelCallback = {};
+
+modelCallback.onload = function(loaded, url) {
+    // the input parameter 'loaded' contains the loaded model instance and other 
+    // useful informations defined in the config file
+
+    myModel = loaded.model;
+
+    var path         = loaded.path;
+    var displayScale = loaded.scale;
+}
+
+modelCallback.onerror = function(errorCode, url) {
+    // error handling ...
+};
+
+modelCallback.onprogress = function(progress, url) {
+    // show progress ...
+};
+
+Cal3D.CalLoader.loadModelFromConfigFile('hero.cfg', modelCallback);
+}}}
 
 == Runtime LOD Control ==
 
 The Cal3D.CalModel.setLodLevel() function is used to set the LOD (level-of-detail) of a model instance. This function takes an augument that is a number in the range [0.0, 1.0]. The value is defined as the amount of the faces that are collapsed. A value of 0.0 will collapse as many faces as possible, whereas a value of 1.0 will set the model to fully detailed. <br>
 Please note that the Cal3DJS library prevents face collapsing over a material border. This is to avoid unattractive artifacts. Therefore, a value of 0.0 does not equal zero faces. It means that all those faces are removed which can be collapsed safely.<br>
-The Cal3D.CalModel.setLodLevel() function is quite expensive, so it should only be called when a significant change in the level-of-detail occured. A repetitive calling on every frame with the same value may kill your performance.
+The Cal3D.CalModel.setLodLevel() function is quite expensive, so it should only be called when a significant change in the level-of-detail occured. Repetitive calls on every frame with the same value may kill the performance.
 {{{
 myModel.setLodLevel(0.5f);
 }}}
