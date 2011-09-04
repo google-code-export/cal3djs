@@ -216,13 +216,34 @@ myCoreModel.setCoreMaterialId(LOWER_BODY_MATERIAL_THREAD, CHAINMAIL_MATERIAL_SET
 myCoreModel.setCoreMaterialId(LOWER_BODY_MATERIAL_THREAD, PLATEMAIL_MATERIAL_SET, lowerBodyPlatemailCoreMaterialId);
 }}}
 
+
 = Model Instance Handling =
 
-After the initialization of a core model, an unlimited number of model instances can be created from it. Each of them has its own state, such as attached meshes, active animations or level-of-detail settings.
+After the loading and initialization of a core model, an unlimited number of model instances can be created from it. Each of them has its own state, such as attached meshes, active animations or level-of-detail settings.
 
 == Creation ==
 
 We create a model instance by simply calling the constructor of Cal3D.CalModel class, passing in the core model it should be based on.
 {{{
 var myModel = new Cal3D.CalModel(myCoreModel);
+}}}
+
+== Attachment and Detachment of Meshes ==
+
+There is no mesh attached to a newly created model instance. This should be done by calling the Cal3D.CalModel.attachMesh() function.
+{{{
+myModel.attachMesh(upperBodyCoreMeshId);
+}}}
+We can them attach another mesh or detach an existing mesh. To detach an attached mesh we use the Cal3D.CalModel.detachMesh() function.
+{{{
+myModel.detachMesh(upperBodyCoreMeshId);
+}}}
+
+== Runtime LOD Control ==
+
+The Cal3D.CalModel.setLodLevel() function is used to set the LOD (level-of-detail) of a model instance. This function takes an augument that is a number in the range [0.0, 1.0]. The value is defined as the amount of the faces that are collapsed. A value of 0.0 will collapse as many faces as possible, whereas a value of 1.0 will set the model to fully detailed. <br>
+Please note that the Cal3DJS library does prevent face collapsing over a material border. This is to avoid unattractive artifacts. Therefore, a value of 0.0 does not equal zero faces. It means that all those faces are removed which can be collapsed safely.<br>
+The Cal3D.CalModel.setLodLevel() function is quite expensive, so it should only be called when a significant change in the level-of-detail occured. A repetitive calling on every frame with the same value may kill your performance.
+{{{
+myModel.setLodLevel(0.5f);
 }}}
