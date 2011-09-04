@@ -240,9 +240,9 @@ myModel.detachMesh(upperBodyCoreMeshId);
 }}}
 Now we have a complete Cal3dJS model instance that can be animated and rendered in our scene.
 
-== Model Loading From a Config File ==
+== Another Way: Load Model From a Config File ==
 
-Since the creation and data loading of a core model and then a model instance are rather boring and tedious routine operations, the Cal3dJS library provide a convenient way to do these all together: we can write a config file and then load the entire model instance with a single call.
+Since the creation and data loading of a core model and then a model instance are rather boring and tedious routine operations, the Cal3dJS library provide a convenient way to do these all together: we can write a config file and then load the entire model instance with using the Cal3D.CalLoader.loadModelFromConfigFile() function.
 {{{
 var myModel;
 
@@ -267,6 +267,40 @@ modelCallback.onprogress = function(progress, url) {
 };
 
 Cal3D.CalLoader.loadModelFromConfigFile('hero.cfg', modelCallback);
+}}}
+The config file should look like this:
+{{{
+#
+# cal3d model configuration file
+#
+# model: hero
+#
+
+# the relative path from the page to the model file folder
+path=./
+
+# the display scaling factor
+scale=1.0
+
+# the skeleton file
+skeleton=hero.xsf
+
+# the animation files
+animation=hero_idle.xaf
+animation=hero_walk.xaf
+animation=hero_limp.xaf
+animation=hero_wave.xaf
+
+# the mesh files
+mesh=hero_upperbody.xmf
+mesh=hero_lowerbody.xmf
+mesh=hero_helmet.xmf
+
+# the material files
+material=hero_upperbody_chainmail.xrf
+material=hero_upperbody_platemail.xrf
+material=hero_lowerbody_chainmail.xrf
+material=hero_lowerbody_platemail.xrf
 }}}
 
 == Runtime LOD Control ==
