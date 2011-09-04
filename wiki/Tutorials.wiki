@@ -334,3 +334,20 @@ myModel.getMixer().clearCycle(idleAnimationId, 0.3f);
 myModel.getMixer().blendCycle(walkAnimationId, 0.8f, 0.3f);
 myModel.getMixer().blendCycle(limpAnimationId, 0.2f, 0.3f);
 }}}
+The Cal3D.CalMixer.executeAction() function is used to execute an action animation. It takes the animation identifier as a first argument. The second and third arguments are the fade in and fade out delay. Actions are executed once and automatically removed afterwards.
+{{{
+myModel.getMixer().executeAction(waveAnimationId, 0.3f, 0.3f);
+}}}
+
+== State Update ==
+
+To obtain a smooth motion of the models, their state needs to be updated regularly. This involves evaluating the new time and blending values for the active animations, and calculating the resulting pose of the skeleton. All this computation is done by calling the Cal3D.CalModel.update() function. The single argument is a floating-point value holding the elapsed seconds since the last update call.
+{{{
+// elapsedSeconds = the time interval from last update in seconds
+myModel.update(elapsedSeconds);
+}}}
+
+== Rendering ==
+
+To avoid any graphic-API dependent code, the actual rendering of the models is not done directly by the Cal3DJS library itself. All the necessary functions are available to make your rendering loop as simple as possible.<br>
+*IMPORTANT*: The rendering of a model must always be enclosed by a Cal3D.CalRenderer.beginRendering() and a Cal3D.CalRenderer.endRendering() function call.
