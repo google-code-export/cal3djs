@@ -242,7 +242,7 @@ Now we have a complete Cal3dJS model instance that can be animated and rendered 
 
 == Another Way: Load Model From a Config File ==
 
-Since the creation and data loading of a core model and then a model instance are rather boring and tedious routine operations, the Cal3dJS library provide a convenient way to do these all together: we can write a config file and then load the entire model instance with using the Cal3D.CalLoader.loadModelFromConfigFile() function.
+Since the creation and data loading of a core model and then a model instance are rather boring and tedious routine operations, the Cal3dJS library provides a convenient way to do these all together: we can write a config file and then load the entire model instance from it using the Cal3D.CalLoader.loadModelFromConfigFile() function.
 {{{
 var myModel;
 
@@ -310,4 +310,27 @@ Please note that the Cal3DJS library prevents face collapsing over a material bo
 The Cal3D.CalModel.setLodLevel() function is quite expensive, so it should only be called when a significant change in the level-of-detail occured. Repetitive calls on every frame with the same value may kill the performance.
 {{{
 myModel.setLodLevel(0.5f);
+}}}
+
+== Material Control ==
+
+A proper initialized material setup in the core model makes it possible to easily change the material set of a mesh or the whole model instance. The Cal3D.CalModel.setMaterialSet() function, either of the Cal3D.CalModel or the Cal3D.CalMesh class, is used for this. The single argument is the new material set to use.
+{{{
+myModel.setMaterialSet(CHAINMAIL_MATERIAL_SET);
+myModel.getMesh(upperBodyMeshId).setMaterialSet(PLATEMAIL_MATERIAL_SET);
+}}}
+
+== Animation Control == 
+
+There are currently two types of animations implemented in the Cal3DJS library: 
+  # Cycles, which are repeating, looping animations. 
+  # Actions, which are one-time executed animations.
+Note that all the available animations in a core model can be used as both animation types.<br>
+There are two function calls that are used to control cycles: blendCycle() and clearCycle() of the Cal3D.CalMixer helper class. <br>
+Cal3D.CalMixer.blendCycle() adjusts the weight of a cyclic animation in a given amount of time. This can be used to fade in a new cycle or to modify the weight of an active cycle. The first argument is the animation identifier, which was returned when the animation was loaded. The second argument is the new weight for the cycle. The third and last argument is the delay until the given weight will be reached. This value can be used to seamlessly blend between two different cycles and to avoid abrupt motion changes.<br>
+Cal3D.CalMixer.clearCycle() fades out an active cycle animation in a given amount of time. The first argument is again an animation identifier. The second argument is the delay until the animation will be at zero weight.
+{{{
+myModel.getMixer().clearCycle(idleAnimationId, 0.3f);
+myModel.getMixer().blendCycle(walkAnimationId, 0.8f, 0.3f);
+myModel.getMixer().blendCycle(limpAnimationId, 0.2f, 0.3f);
 }}}
