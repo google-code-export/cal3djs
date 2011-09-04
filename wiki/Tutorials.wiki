@@ -350,4 +350,122 @@ myModel.update(elapsedSeconds);
 == Rendering ==
 
 To avoid any graphic-API dependent code, the actual rendering of the models is not done directly by the Cal3DJS library itself. All the necessary functions are available to make your rendering loop as simple as possible.<br>
-*IMPORTANT*: The rendering of a model must always be enclosed by a Cal3D.CalRenderer.beginRendering() and a Cal3D.CalRenderer.endRendering() function call.
+*IMPORTANT*: The rendering of a model must always be enclosed by a Cal3D.CalRenderer.beginRendering() and a Cal3D.CalRenderer.endRendering() function call.<br>
+The basic idea is to render the model by visiting all its meshes and their submeshes. Helpful functions for this are Cal3D.CalRenderer.getMeshCount() and Cal3D.CalRenderer.getSubmeshCount(). A call to the Cal3D.CalRenderer.selectMeshSubmesh() function sets the current mesh/submesh to which all following data queries will refer to.<br>
+Material properties can be retrieved by calling Cal3D.CalRenderer.getAmbientColor(), Cal3D.CalRenderer.getDiffuseColor(), Cal3D.CalRenderer.getSpecularColor() and Cal3D.CalRenderer.getShininess().<br>
+The geometric data, such as vertices, normals, texture coordinates and faces, is obtained by calling the appropriate functions and providing a sufficient sized buffer for the data to hold. These functions are Cal3D.CalRenderer.getVertices(), Cal3D.CalRenderer.getNormals(), Cal3D.CalRenderer.getTextureCoordinates() and Cal3D.CalRenderer.getFaces(). They all return the actual number of data elements written to the buffer.
+{{{
+// get the renderer of the model
+var calRenderer = myModel.getRenderer();
+
+// begin the rendering loop
+if(!calRenderer.beginRendering()) {
+    // do error handling and return
+    // ...
+}
+
+// set the global graphic-API states if necessary
+// ...
+
+// get the number of meshes in the model
+var meshCount = calRenderer.getMeshCount();
+
+// loop and render all meshes of the model
+for(meshId=0; meshId<meshCount; meshId++) {
+    // get the number of submeshes in the current mesh
+    var submeshCount = calRenderer.getSubmeshCount(meshId);
+
+    // loop and render all submeshes in the current mesh
+    for(var submeshId=0; submeshId<submeshCount; submeshId++) {
+        // select mesh and submesh for further data access
+        calRenderer.selectMeshSubmesh(meshId, submeshId);
+
+        var colorBuffer = [0, 0, 0, 0];
+
+        // get the material ambient color
+        var ambientColor;
+        calRenderer.getAmbientColor(colorBuffer);
+        ambientColor = [ colorBuffer[0] / 255, colorBuffer[1] / 255, colorBuffer[2] / 255 ];
+
+        // get the material diffuse color
+        var diffuseColor;
+        calRenderer.getDiffuseColor(colorBuffer);
+        diffuseColor = [ colorBuffer[0] / 255, colorBuffer[1] / 255, colorBuffer[2] / 255 ];
+
+        // get the material specular color
+        var specularColor;
+        calRenderer.getSpecularColor(colorBuffer);
+        specularColor = [ colorBuffer[0] / 255, colorBuffer[1] / 255, colorBuffer[2] / 255 ];
+
+        // get the material shininess factor
+        var shininess = calRenderer.getShininess();
+
+        // get the number of faces of the model
+        var faceCount = calRenderer.getFaceCount();
+        // get the number of vertices of the model
+        var vertexCount = calRenderer.getVertexCount();
+        // get the number of texture maps of the model
+        var textureCount = calRenderer.getMapCount();
+
+        var indices = indexBuffers[meshId][submeshId];
+        if(indices.length != faceCount * 3) {
+            // reallocate or adjust the length of the index buffer to hold faceCount * 3 numbers
+            // ...
+
+            // get face indices of the current submesh
+            calRenderer.getFaces(indices);
+
+            // update indices of the current graphic-API dependent mesh object
+            // ...
+        }
+
+        var vertices = vertexBuffers[meshId][submeshId];
+        var normals  = normalBuffers[meshId][submeshId];
+        if(vertices.length != vertexCount * 3) {
+            // reallocate or adjust the length of the vertex buffer and the normal buffer to hold faceCount * 3 numbers
+            // ...
+
+            // get vertices of the current submesh
+            calRenderer.getVertices(vertices);
+            // get normals of the current submesh
+            calRenderer.getNormals(normals);
+
+            // update vertices and normals of the current graphic-API dependent mesh object
+            // ...
+        }
+
+        if(textureCount > 0) {
+            var uv0s = texCoordBuffers[meshId][submeshId][0];
+            if(uv0s.length != vertexCount * 2) {
+                for(var mapId=0; mapId<textureCount; mapId++) {
+                    var uvs = texCoordBuffers[meshId][submeshId][mapId];
+
+                    // reallocate or adjust the length of the texture coordnate buffer to hold vertexCount * 2 numbers
+                    // ...
+
+                    // get texture coordinates of the current map of the current submesh
+                    calRenderer.getTextureCoordinates(mapId, uvs);
+
+                    // update texture/multi-texture coordinates of the current graphic-API dependent mesh object
+                    // ...
+                }
+            }
+        }
+
+        // get the graphic-API dependent texture object stored in the model
+        var textures = [];
+        for(var mapId=0; mapId<textureCount; mapId++) {
+            textures.push(calRenderer.getMapUserData(mapId));
+        }
+
+        // setup render states for the current submesh using the graphic-API
+        // ...
+
+        // render the current submesh using the graphic-API
+        // ...
+    }
+}
+
+// end the rendering of the model
+calRenderer.endRendering();
+}}}
