@@ -13,7 +13,7 @@ var myCoreModel = new Cal3D.CalCoreModel('myHero');
 
 == Data Loading ==
 
-The next step is to load the skeleton data. Note that there can be only one skeleton per core model and it should be loaded before any other type of data. Use the Cal3D.CalLoader.loadCoreSkeletonFromFile() function to do this by providing the URL of the skeleton file and a callback object to retrieve the loaded core model or some useful information in case that any error happened.
+The next step is to load the skeleton data. Note that there can be only one skeleton per core model and it should be loaded before any other type of data. Use the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalLoader.html#.loadCoreSkeletonFromFile Cal3D.CalLoader.loadCoreSkeletonFromFile()] function to do this by providing the URL of the skeleton file and a callback object to retrieve the loaded core model or some useful information in case that any error happened.
 {{{
 var skeletonCallback = {};
 
