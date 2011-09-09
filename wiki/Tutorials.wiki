@@ -167,7 +167,7 @@ Textures are not handled by the Cal3DJS library directly, because of all the dif
 
 In every map of each material there is an identifier stored. This value is written during the exporting process, and is most likely the filename of a texture. The idea is to use this value to load the texture, and reference it afterwards through a user-defined data that can be stored in every core material map at runtime.
 
-Useful functions to get all the core materials of the core model are [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalCoreModel.html#getCoreMaterialCount Cal3D.CalCoreModel.getCoreMaterialCount()] and [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalCoreModel.html#getCoreMaterial Cal3D.CalCoreModel.getCoreMaterial()]. The number of maps in a core material is returned by the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalCoreMaterial.html#getMapCount Cal3D.CalCoreMaterial.getMapCount()] function. Access to the filename of each map is provided through [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalCoreMaterial.html#getMapFilename Cal3D.CalCoreMaterial.getMapFilename()]. User-data, such as an identifier of the loaded texture, can be stored in the core material map with help of the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalCoreMaterial.html#setMapUserData Cal3D.CalCoreMaterial.setMapUserData()] function. It can later be retrieved by calling Cal3D.CalCoreMaterialgetUserMapData(). 
+Useful functions to get all the core materials of the core model are [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalCoreModel.html#getCoreMaterialCount Cal3D.CalCoreModel.getCoreMaterialCount()] and [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalCoreModel.html#getCoreMaterial Cal3D.CalCoreModel.getCoreMaterial()]. The number of maps in a core material is returned by the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalCoreMaterial.html#getMapCount Cal3D.CalCoreMaterial.getMapCount()] function. Access to the filename of each map is provided through [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalCoreMaterial.html#getMapFilename Cal3D.CalCoreMaterial.getMapFilename()]. User-data, such as an identifier of the loaded texture, can be stored in the core material map with help of the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalCoreMaterial.html#setMapUserData Cal3D.CalCoreMaterial.setMapUserData()] function. It can later be retrieved by calling [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalCoreMaterial.html#getMapUserData Cal3D.CalCoreMaterial.getMapUserData()]. 
 {{{
 /*
     Load all textures and store them as user-data in the corresponding core material map
@@ -196,7 +196,7 @@ for(var materialId=0; materialId<materialCount; materialId++) {
     }
 }
 }}}
-If we want to use the built-in material management system of the Cal3DJS library to handle different material sets and threads, we have to initialize it accordingly. This is done by creating all material threads of the core model by calling Cal3D.CalCoreModel.createCoreMaterialThread() for each of them. Then, the Cal3D.CalCoreModel.setCoreMaterialId() is used to assign a material to a specific material thread/set pair.
+If we want to use the built-in material management system of the Cal3DJS library to handle different material sets and threads, we have to initialize it accordingly. This is done by creating all material threads of the core model by calling [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalCoreModel.html#createCoreMaterialThread Cal3D.CalCoreModel.createCoreMaterialThread()] for each of them. Then, the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalCoreModel.html#setCoreMaterialId Cal3D.CalCoreModel.setCoreMaterialId()] is used to assign a material to a specific material thread/set pair.
 {{{
 /*
     Material thread/set setup
@@ -226,18 +226,18 @@ After the loading and initialization of a core model, an unlimited number of mod
 
 == Creation ==
 
-We create a model instance by simply calling the constructor of Cal3D.CalModel class, passing in the core model it should be based on.
+We create a model instance by simply calling the constructor of [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalModel.html Cal3D.CalModel] class, passing in the core model it should be based on.
 {{{
 var myModel = new Cal3D.CalModel(myCoreModel);
 }}}
 
 == Attachment and Detachment of Meshes ==
 
-There is no mesh attached to a newly created model instance. This should be done by calling the Cal3D.CalModel.attachMesh() function.
+There is no mesh attached to a newly created model instance. This should be done by calling the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalModel.html#attachMesh Cal3D.CalModel.attachMesh()] function.
 {{{
 myModel.attachMesh(upperBodyCoreMeshId);
 }}}
-We can them attach another mesh or detach an existing mesh. To detach an attached mesh we use the Cal3D.CalModel.detachMesh() function.
+We can them attach another mesh or detach an existing mesh. To detach an attached mesh we use the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalModel.html#detachMesh Cal3D.CalModel.detachMesh()] function.
 {{{
 myModel.detachMesh(upperBodyCoreMeshId);
 }}}
@@ -245,7 +245,7 @@ Now we have a complete Cal3dJS model instance that can be animated and rendered 
 
 == Another Way: Load Model From a Config File ==
 
-Since the creation and data loading of a core model and then a model instance are rather boring and tedious routine operations, the Cal3dJS library provides a convenient way to do these all together: we can write a config file and then load the entire model instance from it using the Cal3D.CalLoader.loadModelFromConfigFile() function.
+Since the creation and data loading of a core model and then a model instance are rather boring and tedious routine operations, the Cal3dJS library provides a convenient way to do these all together: we can write a config file and then load the entire model instance from it using the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalLoader.html#.loadModelFromConfigFile Cal3D.CalLoader.loadModelFromConfigFile()] function.
 {{{
 var myModel;
 
@@ -308,18 +308,18 @@ material=hero_lowerbody_platemail.xrf
 
 == Runtime LOD Control ==
 
-The Cal3D.CalModel.setLodLevel() function is used to set the LOD (level-of-detail) of a model instance. This function takes an augument that is a number in the range [0.0, 1.0]. The value is defined as the amount of the faces that are collapsed. A value of 0.0 will collapse as many faces as possible, whereas a value of 1.0 will set the model to fully detailed.
+The [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalModel.html#setLodLevel Cal3D.CalModel.setLodLevel()] function is used to set the LOD (level-of-detail) of a model instance. This function takes an augument that is a number in the range [0.0, 1.0]. The value is defined as the amount of the faces that are collapsed. A value of 0.0 will collapse as many faces as possible, whereas a value of 1.0 will set the model to fully detailed.
 
 Please note that the Cal3DJS library prevents face collapsing over a material border. This is to avoid unattractive artifacts. Therefore, a value of 0.0 does not equal zero faces. It means that all those faces are removed which can be collapsed safely.
 
-The Cal3D.CalModel.setLodLevel() function is quite expensive, so it should only be called when a significant change in the level-of-detail occured. Repetitive calls on every frame with the same value may kill the performance.
+The [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalModel.html#setLodLevel Cal3D.CalModel.setLodLevel()] function is quite expensive, so it should only be called when a significant change in the level-of-detail occured. Repetitive calls on every frame with the same value may kill the performance.
 {{{
 myModel.setLodLevel(0.5f);
 }}}
 
 == Material Control ==
 
-A proper initialized material setup in the core model makes it possible to easily change the material set of a mesh or the whole model instance. The Cal3D.CalModel.setMaterialSet() function, either of the Cal3D.CalModel or the Cal3D.CalMesh class, is used for this. The single argument is the new material set to use.
+A proper initialized material setup in the core model makes it possible to easily change the material set of a mesh or the whole model instance. The [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalModel.html#setMaterialSet Cal3D.CalModel.setMaterialSet()] function, either of the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalModel.html Cal3D.CalModel] or the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalMesh.html Cal3D.CalMesh] class, is used for this. The single argument is the new material set to use.
 {{{
 myModel.setMaterialSet(CHAINMAIL_MATERIAL_SET);
 myModel.getMesh(upperBodyMeshId).setMaterialSet(PLATEMAIL_MATERIAL_SET);
@@ -334,24 +334,24 @@ There are currently two types of animations implemented in the Cal3DJS library:
 
 Note that all the available animations in a core model can be used as both animation types.
 
-There are two function calls that are used to control cycles: blendCycle() and clearCycle() of the Cal3D.CalMixer helper class.
+There are two function calls that are used to control cycles: _blendCycle()_ and _clearCycle()_ of the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalMixer.html Cal3D.CalMixer] helper class.
 
-Cal3D.CalMixer.blendCycle() adjusts the weight of a cyclic animation in a given amount of time. This can be used to fade in a new cycle or to modify the weight of an active cycle. The first argument is the animation identifier, which was returned when the animation was loaded. The second argument is the new weight for the cycle. The third and last argument is the delay until the given weight will be reached. This value can be used to seamlessly blend between two different cycles and to avoid abrupt motion changes.
+[http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalMixer.html#blendCycle Cal3D.CalMixer.blendCycle()] adjusts the weight of a cyclic animation in a given amount of time. This can be used to fade in a new cycle or to modify the weight of an active cycle. The first argument is the animation identifier, which was returned when the animation was loaded. The second argument is the new weight for the cycle. The third and last argument is the delay until the given weight will be reached. This value can be used to seamlessly blend between two different cycles and to avoid abrupt motion changes.
 
-Cal3D.CalMixer.clearCycle() fades out an active cycle animation in a given amount of time. The first argument is again an animation identifier. The second argument is the delay until the animation will be at zero weight.
+[http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalMixer.html#clearCycle Cal3D.CalMixer.clearCycle()] fades out an active cycle animation in a given amount of time. The first argument is again an animation identifier. The second argument is the delay until the animation will be at zero weight.
 {{{
 myModel.getMixer().clearCycle(idleAnimationId, 0.3f);
 myModel.getMixer().blendCycle(walkAnimationId, 0.8f, 0.3f);
 myModel.getMixer().blendCycle(limpAnimationId, 0.2f, 0.3f);
 }}}
-The Cal3D.CalMixer.executeAction() function is used to execute an action animation. It takes the animation identifier as a first argument. The second and third arguments are the fade in and fade out delay. Actions are executed once and automatically removed afterwards.
+[http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalMixer.html#executeAction The Cal3D.CalMixer.executeAction()] function is used to execute an action animation. It takes the animation identifier as a first argument. The second and third arguments are the fade in and fade out delay. Actions are executed once and automatically removed afterwards.
 {{{
 myModel.getMixer().executeAction(waveAnimationId, 0.3f, 0.3f);
 }}}
 
 == State Update ==
 
-To obtain a smooth motion of the models, their state needs to be updated regularly. This involves evaluating the new time and blending values for the active animations, and calculating the resulting pose of the skeleton. All this computation is done by calling the Cal3D.CalModel.update() function. The single argument is a floating-point value holding the elapsed seconds since the last update call.
+To obtain a smooth motion of the models, their state needs to be updated regularly. This involves evaluating the new time and blending values for the active animations, and calculating the resulting pose of the skeleton. All this computation is done by calling the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalModel.html#update Cal3D.CalModel.update()] function. The single argument is a floating-point value holding the elapsed seconds since the last update call.
 {{{
 // elapsedSeconds = the time interval from last update in seconds
 myModel.update(elapsedSeconds);
@@ -361,13 +361,13 @@ myModel.update(elapsedSeconds);
 
 To avoid any graphic-API dependent code, the actual rendering of the models is not done directly by the Cal3DJS library itself. All the necessary functions are available to make your rendering loop as simple as possible.
 
-*IMPORTANT*: The rendering of a model must always be enclosed by a Cal3D.CalRenderer.beginRendering() and a Cal3D.CalRenderer.endRendering() function call.
+*IMPORTANT*: The rendering of a model must always be enclosed by a [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalRenderer.html#beginRendering Cal3D.CalRenderer.beginRendering()] and a [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalRenderer.html#endRendering Cal3D.CalRenderer.endRendering()] function call.
 
-The basic idea is to render the model by visiting all its meshes and their submeshes. Helpful functions for this are Cal3D.CalRenderer.getMeshCount() and Cal3D.CalRenderer.getSubmeshCount(). A call to the Cal3D.CalRenderer.selectMeshSubmesh() function sets the current mesh/submesh to which all following data queries will refer to.
+The basic idea is to render the model by visiting all its meshes and their submeshes. Helpful functions for this are [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalRenderer.html#getMeshCount Cal3D.CalRenderer.getMeshCount()] and [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalRenderer.html#getSubmeshCount Cal3D.CalRenderer.getSubmeshCount()]. A call to the [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalRenderer.html#selectMeshSubmesh Cal3D.CalRenderer.selectMeshSubmesh()] function sets the current mesh/submesh to which all following data queries will refer to.
 
-Material properties can be retrieved by calling Cal3D.CalRenderer.getAmbientColor(), Cal3D.CalRenderer.getDiffuseColor(), Cal3D.CalRenderer.getSpecularColor() and Cal3D.CalRenderer.getShininess().
+Material properties can be retrieved by calling [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalRenderer.html#getAmbientColor Cal3D.CalRenderer.getAmbientColor()], [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalRenderer.html#getDiffuseColor Cal3D.CalRenderer.getDiffuseColor()], [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalRenderer.html#getSpecularColor Cal3D.CalRenderer.getSpecularColor()] and [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalRenderer.html#getShininess Cal3D.CalRenderer.getShininess()].
 
-The geometric data, such as vertices, normals, texture coordinates and faces, is obtained by calling the appropriate functions and providing a sufficient sized buffer for the data to hold. These functions are Cal3D.CalRenderer.getVertices(), Cal3D.CalRenderer.getNormals(), Cal3D.CalRenderer.getTextureCoordinates() and Cal3D.CalRenderer.getFaces(). They all return the actual number of data elements written to the buffer.
+The geometric data, such as vertices, normals, texture coordinates and faces, is obtained by calling the appropriate functions and providing a sufficient sized buffer for the data to hold. These functions are [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalRenderer.html#getVertices Cal3D.CalRenderer.getVertices()], [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalRenderer.html#getNormals Cal3D.CalRenderer.getNormals()], [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalRenderer.html#getTextureCoordinates Cal3D.CalRenderer.getTextureCoordinates()] and [http://cal3djs.googlecode.com/svn/trunk/jsdoc/symbols/Cal3D.CalRenderer.html#getFaces Cal3D.CalRenderer.getFaces()]. They all return the actual number of data elements written to the buffer.
 {{{
 // get the renderer of the model
 var calRenderer = myModel.getRenderer();
