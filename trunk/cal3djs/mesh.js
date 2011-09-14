@@ -46,7 +46,7 @@ Cal3D.CalMesh.prototype.getCoreMesh = function() {
 
 /**
 	Get a submesh.<br />
-	his function returns the submesh with the given ID.
+	This function returns the submesh with the given ID.
 	@param {number} submeshId The ID of the submesh.
 	@returns {Cal3D.CalSubmesh} The submesh; null if it does not exist. 
 */
@@ -119,7 +119,7 @@ Cal3D.CalMesh.prototype.setModel = function(model) {
 };
 
 /**
-	Disable internal data (and thus springs system).
+	Disable internal data (and thus spring system).
 */
 Cal3D.CalMesh.prototype.disableInternalData = function() {
 	// disable internal data of each submesh
