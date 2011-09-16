@@ -332,7 +332,7 @@ o-----------------------------------------------------------------------------o
 | 10 Website                                                                  |
 o-----------------------------------------------------------------------------o
 
-  The official website of cal3d can be found at: http://cal3d.sourceforge.net
+  The official website of cal3d can be found at: http://home.gna.org/cal3d/
   The official website of cal3djs can be found at: http://code.google.com/p/cal3djs/
 
 
