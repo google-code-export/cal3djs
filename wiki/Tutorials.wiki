@@ -1,4 +1,4 @@
-#summary This document describes how to use Cal2DJS in our projects.
+#summary This document describes how to use Cal2DJS in your applications.
 #labels Phase-Support,Featured
 
 = Core Model Handling =
