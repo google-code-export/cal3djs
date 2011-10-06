@@ -159,7 +159,15 @@ Cal3D.CalLoader.loadModelFromConfigFile = function(url, callback) {
 					model.setMaterialSet(0);
 
 					if(callback && callback.onload) {
-						callback.onload({ model: model, path: cfg.path, scale: cfg.scale }, url);
+						var loaded = {};
+						loaded['model'] = model;
+						loaded['path']  = cfg.path;
+						loaded['scale'] = cfg.scale;
+						// the user defined items will be returned through
+						for(var key in cfg.userdefined) {
+							loaded[key] = cfg.userdefined[key];
+						}
+						callback.onload(loaded, url);
 					}
 				};
 
@@ -1317,7 +1325,8 @@ Cal3D.CalLoader.parseConfigFile = function(text) {
 		skeletons: [], 
 		animations: [], 
 		meshes: [], 
-		materials: []
+		materials: [], 
+		userdefined: {}
 	};
 
 	var lines = text.split('\n');
@@ -1355,6 +1364,11 @@ Cal3D.CalLoader.parseConfigFile = function(text) {
 			ret.materials.push(value);
 			break;
 		default:
+			// this may be a user defined item, just include it in the 'userdefined' slot
+			if(!(key in ret.userdefined)) {
+				ret.userdefined[key] = [];
+			}
+			ret.userdefined[key].push(value);
 			break;
 		}
 	}
